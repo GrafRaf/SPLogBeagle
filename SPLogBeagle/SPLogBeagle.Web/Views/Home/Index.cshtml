@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div ng-app="SPLogBeagle" ng-controller="LogViewController">
+
+    <div id="loading-image" ng-show="isLoading">
+        <img src="~/Content/spinner.gif" ng-show="!isSMILEnabled()" />
+        <svg ng-show="isSMILEnabled()" class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+        </svg>
+    </div>
+
+    <div class="row">
+        <form class="form-inline" ng-submit="submit()">
+            <div class="form-group">
+                <label for="datepattern">Date from:</label>
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="startDate" is-open="openedStartDate" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="openStartDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+
+                </p>
+            </div>
+            <div class="form-group">
+                <p class="input-group">
+                    <timepicker ng-model="startTime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="datepattern">Date to:</label>
+                <p class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="finishDate" is-open="openedFinishDate" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="openFinishDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </p>
+            </div>
+            <div class="form-group">
+                <p class="input-group">
+                    <timepicker ng-model="finishTime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                </p>
+            </div>
+            <div class="form-group">
+                <label for="pattern">Pattern/CorrelationUid</label>
+                <p class="input-group">
+                    <input type="text" required class="form-control" ng-model="pattern" id="pattern" placeholder="test-pattern">
+                </p>
+            </div>
+            <p class="input-group">
+                <button type="submit" class="btn btn-default">Поехали</button>
+            </p>
+        </form>
+    
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <ul>
+                <li>
+                    <label><input type="checkbox" ng-model="vTimestamp" />Timestamp</label>
+                </li>
+                <li>
+                    <label><input type="checkbox" ng-model="vProcess" />Process</label>
+                </li>
+                <li>
+                    <label><input type="checkbox" ng-model="vTID" />TID</label>
+                </li>
+                <li>
+                    <label><input type="checkbox" ng-model="vArea" />Area</label>
+                </li>
+                <li>
+                    <label><input type="checkbox" ng-model="vCategory" />Category</label>
+                </li>
+                <li>
+                    <label><input type="checkbox" ng-model="vEventID" />EventID</label>
+                </li>
+                <li>
+                    <label><input type="checkbox" ng-model="vLevel" />Level</label>
+                </li>
+                <li>
+                    <label><input type="checkbox" ng-model="vMessage" />Message</label>
+                </li>
+                <li>
+                    <label><input type="checkbox" ng-model="vCorrelationUid" />CorrelationUid</label>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            <ul>
+                <li ng-repeat="lf in logFolders">
+                    <label><input type="checkbox" ng-model="lf.isChecked" />{{lf.title}}</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row" ng-init="isParametersOpen='true'">
+
+        <accordion>
+            <accordion-group ng-repeat="log in LogFiles" heading="{{log.Name}} - {{log.Count}}">
+                <h3>{{log.Name}} - {{log.Count}}</h3>
+                <table ng-if="log.Count>0" class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th ng-repeat="th in log.Data.Value.Header" ng-show="v{{th}}">{{th}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in log.Data.Value.Body">
+                            <td ng-show="vTimestamp">{{row[0]}}</label>
+                            <td ng-show="vProcess">{{row[1]}}</td>
+                            <td ng-show="vTID">{{row[2]}}</td>
+                            <td ng-show="vArea">{{row[3]}}</td>
+                            <td ng-show="vCategory">{{row[4]}}</td>
+                            <td ng-show="vEventID">{{row[5]}}</td>
+                            <td ng-show="vLevel">{{row[6]}}</td>
+                            <td ng-show="vMessage">{{row[7]}}</td>
+                            <td ng-show="vCorrelationUid">{{row[8]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </accordion-group>
+
+            <accordion-group heading="Ошибка" ng-show="error">
+                <p>{{error}}</p>
+            </accordion-group>
+        </accordion>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript" src="~/scripts/angular.min.js"></script>
+    <script type="text/javascript" src="~/scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="~/scripts/init.js"></script>
+}
