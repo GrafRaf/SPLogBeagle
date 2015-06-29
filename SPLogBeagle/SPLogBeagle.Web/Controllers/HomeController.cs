@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -10,40 +13,40 @@ namespace SPLogBeagle.Web.Controllers
 {
     public class HomeController : Controller
     {
+        NameValueCollection AppSettings = ConfigurationManager.AppSettings;
+        string TempFilesDirNamePattern { get { return AppSettings["TempFilesDirNamePattern"]; } }
+        bool IsRemoteProcessor { get { bool result = false; bool.TryParse(AppSettings["IsRemoteProcessor"], out result); return result; } }
+
         public ActionResult Index()
         {
             return View();
         }
 
-        public JsonResult Find(DateTime startDate, DateTime finishDate, string pattern, string[] logFolders)
+        public JsonResult Find(DateTime startDate, DateTime finishDate, string pattern, bool isRemoteLogProcessing, string[] logFolders)
         {
-            List<string> Locations = logFolders.ToList(); ;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            List<string> Locations = logFolders.ToList();
             var dt = DateTime.Now;
             var user = (User.Identity.Name ?? "").Replace('\\', '-');
-            var tempDir = String.Format(@"C:\temp\splogs\{0}-{1}{2}{3}-{4}-{5}-{6}.{7}", user, dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, dt.Second, dt.Millisecond);
-
-            Directory.CreateDirectory(tempDir);
             Dictionary<string, List<string>> LogFiles = new Dictionary<string, List<string>>();
             Dictionary<string, Lib.LogTable> result = new Dictionary<string, Lib.LogTable>();
-            foreach (var folder in Locations)
+            ILogsProcessor logsProcessor = null;
+            bool IsRemote = isRemoteLogProcessing;
+            if (IsRemote)
             {
-                LogFiles[folder] = Directory.GetFiles(folder, "*-????????-????.log").Where(l => l.IsFileDateOk(startDate, finishDate)).ToList();
-                foreach (var file in LogFiles[folder])
-                {
-                    var dstFileName = tempDir + "\\" + new System.IO.FileInfo(file).Name;
-                    System.IO.File.Copy(file, dstFileName);
-                    try
-                    {
-                        result[file] = new Lib.LogTable(dstFileName, pattern);
-                    }
-                    finally
-                    {
-                        System.IO.File.Delete(dstFileName);
-                    }
-                }
+                logsProcessor = new RemoteLogsProcessor(User.Identity.Name, Locations);
             }
-            System.IO.Directory.Delete(tempDir);
-            var jsonResult = Json(result.Select(l => new { Name = l.Key, Count = l.Value.Body.Count, Data = l }), JsonRequestBehavior.AllowGet);
+            else
+            {
+                logsProcessor = new LocalLogsProcessor(User.Identity.Name, Locations, TempFilesDirNamePattern);
+            }
+            result = logsProcessor.Process(startDate, finishDate, pattern);
+            var jsonResult = Json(new
+            {
+                LogFiles = result.Select(l => new { Name = l.Key, Count = l.Value.Body.Count, Data = l }),
+                ElapsedMilliseconds = sw.ElapsedMilliseconds
+            }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
