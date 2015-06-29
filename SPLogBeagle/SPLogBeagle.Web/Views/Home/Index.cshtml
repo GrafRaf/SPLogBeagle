@@ -48,10 +48,10 @@
                 </p>
             </div>
             <div class="form-group">
-                <label><input type="checkbox" ng-model="isRemoteLogProcessing">Обрабатывать логи удалённо</label>
+                <label><input type="checkbox" ng-model="isRemoteLogProcessing">IsRemoteLogProcessing</label>
             </div>
             <p class="input-group">
-                <button type="submit" class="btn btn-default">Поехали</button>
+                <button type="submit" class="btn btn-default">Go</button>
             </p>
         </form>
     
@@ -95,7 +95,7 @@
         </div>
     </div>
     <div class="row" ng-init="isParametersOpen='true'">
-        <h4><span>Обработано за {{model.ElapsedMilliseconds}} ms</span>&nbsp;</h4>
+        <h4><span ng-show="model.ElapsedMilliseconds">Processed in {{model.ElapsedMilliseconds}} ms</span>&nbsp;</h4>
         <accordion>
             <accordion-group ng-repeat="log in model.LogFiles" heading="{{log.Name}} - {{log.Count}}">
                 <h3>{{log.Name}} - {{log.Count}}</h3>
@@ -121,7 +121,7 @@
                 </table>
             </accordion-group>
 
-            <accordion-group heading="Ошибка" ng-show="error">
+            <accordion-group heading="Error" ng-show="error">
                 <p>{{error}}</p>
             </accordion-group>
         </accordion>
