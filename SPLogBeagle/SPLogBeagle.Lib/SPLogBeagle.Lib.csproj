@@ -40,7 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILogsProcessor.cs" />
     <Compile Include="LogHelpers.cs" />
+    <Compile Include="LocalLogsProcessor.cs" />
+    <Compile Include="RemoteLogsProcessor.cs" />
     <Compile Include="LogTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SPLogEntry.cs" />

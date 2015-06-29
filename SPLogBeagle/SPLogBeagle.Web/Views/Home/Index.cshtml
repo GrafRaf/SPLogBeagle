@@ -20,7 +20,6 @@
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="openStartDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
-
                 </p>
             </div>
             <div class="form-group">
@@ -47,6 +46,9 @@
                 <p class="input-group">
                     <input type="text" required class="form-control" ng-model="pattern" id="pattern" placeholder="test-pattern">
                 </p>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" ng-model="isRemoteLogProcessing">Обрабатывать логи удалённо</label>
             </div>
             <p class="input-group">
                 <button type="submit" class="btn btn-default">Поехали</button>
@@ -93,9 +95,9 @@
         </div>
     </div>
     <div class="row" ng-init="isParametersOpen='true'">
-
+        <h4><span>Обработано за {{model.ElapsedMilliseconds}} ms</span>&nbsp;</h4>
         <accordion>
-            <accordion-group ng-repeat="log in LogFiles" heading="{{log.Name}} - {{log.Count}}">
+            <accordion-group ng-repeat="log in model.LogFiles" heading="{{log.Name}} - {{log.Count}}">
                 <h3>{{log.Name}} - {{log.Count}}</h3>
                 <table ng-if="log.Count>0" class="table table-condensed">
                     <thead>
@@ -105,7 +107,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in log.Data.Value.Body">
-                            <td ng-show="vTimestamp">{{row[0]}}</label>
+                            <td ng-show="vTimestamp">{{row[0]}}</td>
                             <td ng-show="vProcess">{{row[1]}}</td>
                             <td ng-show="vTID">{{row[2]}}</td>
                             <td ng-show="vArea">{{row[3]}}</td>

@@ -12,21 +12,13 @@
         $scope.hstep = 1;
         $scope.mstep = 1;
         $scope.ismeridian = false;
-        $scope.logFolders = [
-            { isChecked: true, title: "Server 1", name: "\\\\server1\\logs" },
-            { isChecked: true, title: "Server 2", name: "\\\\server2\\logs" },
-            { isChecked: true, title: "Server 3", name: "\\\\server3\\logs" },
-            { isChecked: true, title: "Server 4", name: "\\\\server4\\logs" },
-            { isChecked: true, title: "Server 5", name: "\\\\server5\\logs" },
-            { isChecked: true, title: "Server 6", name: "\\\\server6\\logs" },
-            { isChecked: true, title: "Server 7", name: "\\\\server7\\logs" }
-        ];
+        $scope.logFolders = [];
         var dt = new Date();
         $scope.startDate = dt;
         $scope.finishDate = dt;
         $scope.startTime = dt;
         $scope.finishTime = dt;
-        $scope.pattern = "";
+        $scope.pattern = "Exception";
 
         $scope.openStartDate = function ($event) {
             $event.preventDefault();
@@ -67,12 +59,13 @@
                     "startDate": $scope.getDateTime($scope.startDate, $scope.startTime),
                     "finishDate": $scope.getDateTime($scope.finishDate, $scope.finishTime),
                     "pattern": $scope.pattern,
+                    "isRemoteLogProcessing": $scope.isRemoteLogProcessing ? true : false,
                     "logFolders": $scope.getLogFolders()
                 },
                 headers: { 'Content-Type': 'application/json' }
             }).
                 success(function (data, status, headers, config) {
-                    $scope.LogFiles = data;
+                    $scope.model = data;
                     $scope.isLoading = false;
                 }).
                 error(function (data, status, headers, config) {
