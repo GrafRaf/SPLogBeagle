@@ -49,6 +49,26 @@
             return result;
         };
 
+        $scope.loadLogFolders = function () {
+            $scope.isLoading = true;
+            $scope.error = "";
+            $http({
+                method: 'GET',
+                url: "/scripts/locations-prod.json",
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .success(function (data, status, headers, config) {
+                $scope.logFolders = data;
+                $scope.isLoading = false;
+            })
+            .error(function (data, status, headers, config) {
+                var msg = 'Request failed. ' + data + '\n' + status + '\n' + headers + '\n' + config;
+                console.log(data);
+                $scope.error = msg;
+                $scope.isLoading = false;
+            });
+        }
+
         $scope.submit = function () {
             $scope.isLoading = true;
             $scope.error = "";
@@ -75,6 +95,9 @@
                     $scope.isLoading = false;
                 });
         }
+
+        $scope.loadLogFolders();
+
         $scope.isLoading = false;
     }
 

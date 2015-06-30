@@ -1,0 +1,5 @@
+﻿[
+    { "isChecked": true, "title": "Server1", "name": "\\\\server1\\logs" },
+    { "isChecked": false, "title": "Server2", "name": "\\\\server2\\logs" },
+    { "isChecked": true, "title": "Server3", "name": "\\\\server3\\logs" }
+]
