@@ -146,3 +146,7 @@ footer {
             transform: rotate(450deg);
   }
 }
+/* datetime picker */
+.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default {
+    border: 0;
+}

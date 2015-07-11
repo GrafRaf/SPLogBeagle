@@ -19,12 +19,15 @@ namespace SPLogBeagle.Web
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+            bundles.Add(new ScriptBundle("~/bundles/js").Include(
                       "~/Scripts/bootstrap.js",
+                      "~/Scripts/angular.js",
+                      "~/Scripts/datetime-picker.min.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/font-awesome.min.css",
                       "~/Content/site.css"));
         }
     }

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module("SPLogBeagle", ['ui.bootstrap'])
+        .module("SPLogBeagle", ['ui.bootstrap', 'ui.bootstrap.datetimepicker'])
         .controller("LogViewController", LogViewController);
 
 
@@ -20,11 +20,31 @@
         $scope.finishTime = dt;
         $scope.pattern = "Exception";
 
-        $scope.openStartDate = function ($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
+        $scope.open = {
+            startDate: false,
+            finishDate: false
+        };
 
-            $scope.openedStartDate = true;
+        // Disable weekend selection
+        $scope.disabled = function (date, mode) {
+            return (mode === 'day' && (new Date().toDateString() == date.toDateString()));
+        };
+
+        $scope.dateOptions = {
+            showWeeks: false,
+            startingDay: 1
+        };
+
+        $scope.timeOptions = {
+            //readonlyInput: true,
+            showMeridian: false
+        };
+
+        $scope.openCalendar = function (e, date) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            $scope.open[date] = true;
         };
 
         $scope.isSMILEnabled = function () {
@@ -54,7 +74,7 @@
             $scope.error = "";
             $http({
                 method: 'GET',
-                url: "/scripts/locations-prod.json",
+                url: "/scripts/locations-test.json",
                 headers: { 'Content-Type': 'application/json' }
             })
             .success(function (data, status, headers, config) {
