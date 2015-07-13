@@ -119,8 +119,14 @@
         $scope.uploader = new FileUploader(
             {
                 url: "/home/searchinfile",
-                formData: [$scope.pattern]
+                formData: [{ "pattern": $scope.pattern }],
+                onBeforeUploadItem: function (item) { $scope.isLoading = true; },
+                onSuccessItem: function (item, response, status, headers) {
+                    $scope.model = response;
+                    $scope.isLoading = false;
+                }
             });
+
 
         $scope.loadLogFolders();
 

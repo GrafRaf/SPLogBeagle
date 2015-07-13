@@ -20,7 +20,7 @@ namespace SPLogBeagle.Lib
             LogsFolders = logsFolders;
             TempFilesDirNamePattern = tempFilesDirNamePattern;
         }
-        public Dictionary<string, Lib.LogTable> Process(DateTime startDate, DateTime finishDate, string pattern)
+        public Dictionary<string, Lib.LogTable> Process(DateTime? startDate, DateTime? finishDate, string pattern)
         {
             var dt = DateTime.Now;
             Dictionary<string, List<string>> LogFiles = new Dictionary<string, List<string>>();
@@ -29,7 +29,9 @@ namespace SPLogBeagle.Lib
             Directory.CreateDirectory(tempDir);
             foreach (var folder in LogsFolders)
             {
-                LogFiles[folder] = Directory.GetFiles(folder, "*-????????-????.log").Where(l => l.IsFileDateOk(startDate, finishDate)).ToList();
+                LogFiles[folder] = Directory.GetFiles(folder, "*-????????-????.log")
+                    .Where(l => !startDate.HasValue || !finishDate.HasValue || (startDate.HasValue && finishDate.HasValue && l.IsFileDateOk(startDate.Value, finishDate.Value)))
+                    .ToList();
                 foreach (var file in LogFiles[folder])
                 {
                     var dstFileName = tempDir + "\\" + new System.IO.FileInfo(file).Name;

@@ -35,7 +35,7 @@ namespace SPLogBeagle.Web.Controllers
             bool IsRemote = isRemoteLogProcessing;
             if (IsRemote)
             {
-                logsProcessor = new RemoteLogsProcessor(User.Identity.Name, Locations);
+                logsProcessor = new RemoteLogsProcessor(User.Identity.Name, Locations, false);
             }
             else
             {
@@ -55,8 +55,11 @@ namespace SPLogBeagle.Web.Controllers
         {
             Stopwatch sw = new Stopwatch();
             sw.Start();
+            var pattern = formData["pattern"];
             var dt = DateTime.Now;
             var user = (User.Identity.Name ?? "").Replace('\\', '-');
+            List<string> LogsFiles = new List<string>();
+            Dictionary<string, Lib.LogTable> result = new Dictionary<string, Lib.LogTable>();
             foreach (string file in Request.Files)
             {
                 var fileContent = Request.Files[file];
@@ -70,25 +73,24 @@ namespace SPLogBeagle.Web.Controllers
                     using (var fileStream = System.IO.File.Create(path))
                     {
                         stream.CopyTo(fileStream);
+                        LogsFiles.Add(path);
                     }
                 }
             }
-            //Dictionary<string, List<string>> LogFiles = new Dictionary<string, List<string>>();
-            //Dictionary<string, Lib.LogTable> result = new Dictionary<string, Lib.LogTable>();
-            //ILogsProcessor logsProcessor = null;
+            ILogsProcessor logsProcessor = null;
             //bool IsRemote = isRemoteLogProcessing;
             //if (IsRemote)
             //{
-            //    logsProcessor = new RemoteLogsProcessor(User.Identity.Name, Locations);
+            logsProcessor = new RemoteLogsProcessor(User.Identity.Name, LogsFiles, true);
             //}
             //else
             //{
             //    logsProcessor = new LocalLogsProcessor(User.Identity.Name, Locations, TempFilesDirNamePattern);
             //}
-            //result = logsProcessor.Process(startDate, finishDate, pattern);
+            result = logsProcessor.Process(null, null, pattern);
             var jsonResult = Json(new
             {
-                //LogFiles = result.Select(l => new { Name = l.Key, Count = l.Value.Body.Count, Data = l }),
+                LogFiles = result.Select(l => new { Name = l.Key, Count = l.Value.Body.Count, Data = l }),
                 ElapsedMilliseconds = sw.ElapsedMilliseconds
             }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
