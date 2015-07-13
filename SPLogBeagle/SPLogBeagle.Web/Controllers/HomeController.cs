@@ -50,5 +50,49 @@ namespace SPLogBeagle.Web.Controllers
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
+
+        public JsonResult Searchinfile(FormCollection formData)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var dt = DateTime.Now;
+            var user = (User.Identity.Name ?? "").Replace('\\', '-');
+            foreach (string file in Request.Files)
+            {
+                var fileContent = Request.Files[file];
+                if (fileContent != null && fileContent.ContentLength > 0)
+                {
+                    // get a stream
+                    var stream = fileContent.InputStream;
+                    // and optionally write the file to disk
+                    var fileName = Path.GetFileName(file);
+                    var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
+                    using (var fileStream = System.IO.File.Create(path))
+                    {
+                        stream.CopyTo(fileStream);
+                    }
+                }
+            }
+            //Dictionary<string, List<string>> LogFiles = new Dictionary<string, List<string>>();
+            //Dictionary<string, Lib.LogTable> result = new Dictionary<string, Lib.LogTable>();
+            //ILogsProcessor logsProcessor = null;
+            //bool IsRemote = isRemoteLogProcessing;
+            //if (IsRemote)
+            //{
+            //    logsProcessor = new RemoteLogsProcessor(User.Identity.Name, Locations);
+            //}
+            //else
+            //{
+            //    logsProcessor = new LocalLogsProcessor(User.Identity.Name, Locations, TempFilesDirNamePattern);
+            //}
+            //result = logsProcessor.Process(startDate, finishDate, pattern);
+            var jsonResult = Json(new
+            {
+                //LogFiles = result.Select(l => new { Name = l.Key, Count = l.Value.Body.Count, Data = l }),
+                ElapsedMilliseconds = sw.ElapsedMilliseconds
+            }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
     }
 }

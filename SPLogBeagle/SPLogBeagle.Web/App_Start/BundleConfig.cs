@@ -23,6 +23,7 @@ namespace SPLogBeagle.Web
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/angular.js",
                       "~/Scripts/datetime-picker.min.js",
+                      "~/Scripts/angular-file-upload.min.js",
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

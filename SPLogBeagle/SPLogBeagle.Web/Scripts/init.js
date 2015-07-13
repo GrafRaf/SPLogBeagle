@@ -2,11 +2,11 @@
     'use strict';
 
     angular
-        .module("SPLogBeagle", ['ui.bootstrap', 'ui.bootstrap.datetimepicker'])
+        .module("SPLogBeagle", ['ui.bootstrap', 'ui.bootstrap.datetimepicker', 'angularFileUpload'])
         .controller("LogViewController", LogViewController);
 
 
-    function LogViewController($http, $scope) {
+    function LogViewController($http, $scope, FileUploader) {
         $scope.isLoading = true;
         $scope.format = "dd/MM/yyyy";
         $scope.hstep = 1;
@@ -115,6 +115,12 @@
                     $scope.isLoading = false;
                 });
         }
+
+        $scope.uploader = new FileUploader(
+            {
+                url: "/home/searchinfile",
+                formData: [$scope.pattern]
+            });
 
         $scope.loadLogFolders();
 
