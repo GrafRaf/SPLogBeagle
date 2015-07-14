@@ -83,7 +83,7 @@ namespace SPLogBeagle.Web.Controllers
             result = logsProcessor.Process(null, null, pattern);
             var jsonResult = Json(new
             {
-                LogFiles = result.Select(l => new { Name = l.Key, Count = l.Value.Body.Count, Data = l }),
+                LogFiles = result.Select(l => new { Name = Path.GetFileName(l.Key), Count = l.Value.Body.Count, Data = l }),
                 ElapsedMilliseconds = sw.ElapsedMilliseconds
             }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;

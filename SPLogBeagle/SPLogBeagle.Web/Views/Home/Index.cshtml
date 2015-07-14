@@ -11,150 +11,78 @@
         </svg>
     </div>
 
-    <div class="container-fluid">
-        <form class="form-horizontal">
+    <div class="col-md-12 col-lg-12">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <h3>Parameters</h3>
+            <hr />
+            <label class="control-label"><input type="radio" ng-model="searchType" value="files"> Search acros uploaded files</label><br />
+            <label class="control-label"><input type="radio" ng-model="searchType" value="folders"> Search acros predefined location</label><br />
+            <label class="control-label" ng-show="searchType == 'folders'"><input type="checkbox" ng-model="isRemoteLogProcessing"> IsRemoteLogProcessing</label><br />
 
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
-                <h3>Parameters</h3>
-                <hr />
-                <div class="form-group">
-                    <label class="col-sm-4 control-label" for="startDate">From</label>
-                    <div class="col-sm-8">
-                        <p class="input-group">
-                            <input type="text" id="startDate" class="form-control" datetime-picker="dd.MM.yyyy HH:mm" ng-model="startDate" is-open="open.startDate" enable-time="true" datepicker-options="dateOptions" timepicker-options="timeOptions" />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'startDate')"><i class="fa fa-calendar"></i></button>
-                            </span>
-                        </p>
+            <div ng-show="searchType == 'folders'">
+                <div class="form-group col-md-6 col-lg-6">
+                    <label class="control-label" for="startDate">From</label>
+                    <p class="input-group">
+                        <input type="text" id="startDate" class="form-control" datetime-picker="dd.MM.yyyy HH:mm" ng-model="startDate" is-open="open.startDate" enable-time="true" datepicker-options="dateOptions" timepicker-options="timeOptions" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'startDate')"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </p>
+                </div>
+                <div class="form-group col-md-6 col-lg-6">
+                    <label class="control-label" for="finishDate">To</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="finishDate" datetime-picker="dd.MM.yyyy HH:mm" ng-model="finishDate" is-open="open.finishDate" enable-time="true" datepicker-options="dateOptions" timepicker-options="timeOptions" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'finishDate')"><i class="fa fa-calendar"></i></button>
+                        </span>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-4 control-label" for="finishDate">To</label>
-                    <div class="col-sm-8">
-                        <p class="input-group">
-                            <input type="text" class="form-control" id="finishDate" datetime-picker="dd.MM.yyyy HH:mm" ng-model="finishDate" is-open="open.finishDate" enable-time="true" datepicker-options="dateOptions" timepicker-options="timeOptions" />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'finishDate')"><i class="fa fa-calendar"></i></button>
-                            </span>
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 control-label" for="pattern">Pattern or CorrelationUid</label>
-                    <div class="col-sm-8">
-                        <p class="input-group">
-                            <input type="text" required class="form-control" ng-model="pattern" id="pattern" placeholder="test-pattern">
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group col">
-                    <label class="control-label col-lg-offset-5"><input type="checkbox" ng-model="isRemoteLogProcessing">IsRemoteLogProcessing</label>
-                </div>
-                <p class="input-group pull-right">
-                    <button type="submit" class="btn btn-success">Go</button>
-                </p>
-                @*<form class="form-inline" ng-submit="submit()">
-                    <div class="form-group">
-                        <label for="datepattern">Date from:</label>
-                        <p class="input-group">
-                            <input type="text" class="form-control" datetime-picker="dd MMM yyyy HH:mm" ng-model="myDate" is-open="isOpen" />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="openCalendar($event, prop)"><i class="fa fa-calendar"></i></button>
-                            </span>
-                        </p>
-                        @*<p class="input-group">
-                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="startDate" is-open="openedStartDate" ng-required="true" close-text="Close" />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="openStartDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
-                    </div>
-                    <div class="form-group">
-                        <p class="input-group">
-                            <timepicker ng-model="startTime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
-                        </p>
-                    </div>
-                    <div class="form-group">
-                        <label for="datepattern">Date to:</label>
-                        <p class="input-group">
-                            <input type="text" class="form-control" datetime-picker="dd MMM yyyy HH:mm" ng-model="myDate" is-open="isOpen" />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="openCalendar($event, prop)"><i class="fa fa-calendar"></i></button>
-                            </span>
-                        </p>
-                        @*<p class="input-group">
-                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="finishDate" is-open="openedFinishDate" ng-required="true" close-text="Close" />
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" ng-click="openFinishDate($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                            </span>
-                        </p>
-                    </div>
-                    <div class="form-group">
-                        <p class="input-group">
-                            <timepicker ng-model="finishTime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
-                        </p>
-                    </div>
-                </form>*@
-
             </div>
+        </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
-                <h3>Columns</h3>
-                <hr />
-                <ul>
-                    <li>
-                        <label><input type="checkbox" ng-model="vTimestamp" />Timestamp</label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" ng-model="vProcess" />Process</label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" ng-model="vTID" />TID</label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" ng-model="vArea" />Area</label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" ng-model="vCategory" />Category</label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" ng-model="vEventID" />EventID</label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" ng-model="vLevel" />Level</label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" ng-model="vMessage" />Message</label>
-                    </li>
-                    <li>
-                        <label><input type="checkbox" ng-model="vCorrelationUid" />CorrelationUid</label>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col-lg-8">
-                <h3>Locations</h3>
-                <hr />
-                <ul>
-                    <li ng-repeat="lf in logFolders">
-                        <label><input type="checkbox" ng-model="lf.isChecked" />{{lf.title}}</label>
-                    </li>
-                </ul>
-                <label><input type="checkbox" ng-model="isCustomFile" />Load file</label>
+        <div class="col-md-6 col-lg-6">
+            <h3>Locations</h3>
+            <hr />
+            <ul ng-show="searchType == 'folders'">
+                <li ng-repeat="lf in logFolders">
+                    <label><input type="checkbox" ng-model="lf.isChecked" />{{lf.title}}</label>
+                </li>
+            </ul>
+            <div ng-show="searchType == 'files'">
                 <input type="file" nv-file-select uploader="uploader" multiple /><br />
                 <ul>
                     <li ng-repeat="item in uploader.queue">
-                        Name: <span ng-bind="item.file.name"></span><br />
-                        @*<button ng-click="item.upload()">upload</button>*@
+                        <span ng-bind="item.file.name"></span><br />
                     </li>
                 </ul>
-                <button ng-click="uploadLogFiles()">upload</button>
             </div>
-        </form>        
+        </div>
+
     </div>
-            
-    
-    <div class="row" ng-init="isParametersOpen='true'">
+    <div class="col-md-12 col-lg-12">
+        <div class="form-group">
+            <label class="control-label" for="pattern">Pattern or CorrelationUid</label>
+            <div class="input-group col-md-12 col-lg-12">
+                <input type="text" required class="form-control" ng-model="pattern" id="pattern" placeholder="test-pattern">
+                <span class="btn btn-success input-group-addon" ng-click="search()">Search</span>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="col-md-12 col-lg-12">
+        <label><input type="checkbox" ng-model="vTimestamp" />Timestamp</label>&nbsp;&nbsp;
+        <label><input type="checkbox" ng-model="vProcess" />Process</label>&nbsp;&nbsp;
+        <label><input type="checkbox" ng-model="vTID" />TID</label>&nbsp;&nbsp;
+        <label><input type="checkbox" ng-model="vArea" />Area</label>&nbsp;&nbsp;
+        <label><input type="checkbox" ng-model="vCategory" />Category</label>&nbsp;&nbsp;
+        <label><input type="checkbox" ng-model="vEventID" />EventID</label>&nbsp;&nbsp;
+        <label><input type="checkbox" ng-model="vLevel" />Level</label>&nbsp;&nbsp;
+        <label><input type="checkbox" ng-model="vMessage" />Message</label>&nbsp;&nbsp;
+        <label><input type="checkbox" ng-model="vCorrelationUid" />CorrelationUid</label>
+    </div>
+    <hr />
+    <div class="col-md-12 col-lg-12" ng-init="isParametersOpen='true'">
         <h4><span ng-show="model.ElapsedMilliseconds">Processed in {{model.ElapsedMilliseconds}} ms</span>&nbsp;</h4>
         <accordion>
             <accordion-group ng-repeat="log in model.LogFiles" heading="{{log.Name}} - {{log.Count}}">

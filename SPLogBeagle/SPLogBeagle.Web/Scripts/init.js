@@ -8,26 +8,19 @@
 
     function LogViewController($http, $scope, FileUploader) {
         $scope.isLoading = true;
-        $scope.format = "dd/MM/yyyy";
-        $scope.hstep = 1;
-        $scope.mstep = 1;
-        $scope.ismeridian = false;
         $scope.logFolders = [];
         var dt = new Date();
         $scope.startDate = dt;
         $scope.finishDate = dt;
-        $scope.startTime = dt;
-        $scope.finishTime = dt;
+        $scope.searchType = 'folders';
         $scope.pattern = "Exception";
+        $scope.vTimestamp = true;
+        $scope.vMessage = true;
+        $scope.vCorrelationUid = true;
 
         $scope.open = {
             startDate: false,
             finishDate: false
-        };
-
-        // Disable weekend selection
-        $scope.disabled = function (date, mode) {
-            return (mode === 'day' && (new Date().toDateString() == date.toDateString()));
         };
 
         $scope.dateOptions = {
@@ -36,7 +29,6 @@
         };
 
         $scope.timeOptions = {
-            //readonlyInput: true,
             showMeridian: false
         };
 
@@ -51,19 +43,7 @@
             return Modernizr.smil;
         };
 
-        $scope.openFinishDate = function ($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            $scope.openedFinishDate = true;
-        };
-
-        $scope.getDateTime = function (date, time) {
-            var result = new Date(date.getFullYear(), date.getMonth(), date.getDate(), time.getHours(), time.getMinutes());
-            return result;
-        };
-
-        $scope.getLogFolders = function () {
+         $scope.getLogFolders = function () {
             var result = [];
             $scope.logFolders.forEach(function (e) { if (e.isChecked) { result.push(e.name) } });
             return result;
@@ -89,15 +69,15 @@
             });
         }
 
-        $scope.submit = function () {
+        $scope.searchAcrosFolders = function () {
             $scope.isLoading = true;
             $scope.error = "";
             $http({
                 method: 'GET',
                 url: "/home/find",
                 params: {
-                    "startDate": $scope.getDateTime($scope.startDate, $scope.startTime),
-                    "finishDate": $scope.getDateTime($scope.finishDate, $scope.finishTime),
+                    "startDate": $scope.startDate, //$scope.getDateTime($scope.startDate, $scope.startTime),
+                    "finishDate": $scope.finishDate, //$scope.getDateTime($scope.finishDate, $scope.finishTime),
                     "pattern": $scope.pattern,
                     "isRemoteLogProcessing": $scope.isRemoteLogProcessing ? true : false,
                     "logFolders": $scope.getLogFolders()
@@ -119,14 +99,16 @@
         $scope.uploader = new FileUploader(
             {
                 url: "/home/searchinfile",
-                //filters: [{
-                //    name: 'yourName1',
-                //    // A user-defined filter
-                //    fn: function(item) {
-                //        if (item.file.name.)
-                //        return true;
-                //    }
-                //}],
+                filters: [{
+                    name: 'Is .log file',
+                    fn: function (item) {
+                        if (item && item.name && item.name.endsWith(".log")) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }],
                 onSuccessItem: function (item, response, status, headers) {
                     $scope.model.LogFiles.push(response.LogFiles[0]);
                     $scope.model.ElapsedMilliseconds += response.ElapsedMilliseconds;
@@ -142,12 +124,21 @@
             Array.prototype.push.apply(item.formData, formData);
         };
 
-        $scope.uploadLogFiles = function () {
+        $scope.searchAcrosFiles = function () {
             $scope.model = { LogFiles: [], ElapsedMilliseconds: 0 };
             $scope.uploader.uploadAll();
         };
 
         $scope.loadLogFolders();
+
+        $scope.search = function () {
+            if ($scope.searchType === 'folders') {
+                $scope.searchAcrosFolders();
+            }
+            if ($scope.searchType === 'files') {
+                $scope.searchAcrosFiles();
+            }
+        };
 
         $scope.isLoading = false;
     }
