@@ -56,6 +56,7 @@ namespace SPLogBeagle.Web.Controllers
             Stopwatch sw = new Stopwatch();
             sw.Start();
             var pattern = formData["pattern"];
+            var fileName = formData["fileName"];
             var dt = DateTime.Now;
             var user = (User.Identity.Name ?? "").Replace('\\', '-');
             List<string> LogsFiles = new List<string>();
@@ -68,7 +69,7 @@ namespace SPLogBeagle.Web.Controllers
                     // get a stream
                     var stream = fileContent.InputStream;
                     // and optionally write the file to disk
-                    var fileName = Path.GetFileName(file);
+                    fileName = Path.GetFileName(fileName);
                     var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
                     using (var fileStream = System.IO.File.Create(path))
                     {
@@ -78,15 +79,7 @@ namespace SPLogBeagle.Web.Controllers
                 }
             }
             ILogsProcessor logsProcessor = null;
-            //bool IsRemote = isRemoteLogProcessing;
-            //if (IsRemote)
-            //{
             logsProcessor = new RemoteLogsProcessor(User.Identity.Name, LogsFiles, true);
-            //}
-            //else
-            //{
-            //    logsProcessor = new LocalLogsProcessor(User.Identity.Name, Locations, TempFilesDirNamePattern);
-            //}
             result = logsProcessor.Process(null, null, pattern);
             var jsonResult = Json(new
             {

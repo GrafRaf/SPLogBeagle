@@ -141,13 +141,14 @@
                     </li>
                 </ul>
                 <label><input type="checkbox" ng-model="isCustomFile" />Load file</label>
-                <input type="file" nv-file-select uploader="uploader" /><br />
+                <input type="file" nv-file-select uploader="uploader" multiple /><br />
                 <ul>
                     <li ng-repeat="item in uploader.queue">
                         Name: <span ng-bind="item.file.name"></span><br />
-                        <button ng-click="item.upload()">upload</button>
+                        @*<button ng-click="item.upload()">upload</button>*@
                     </li>
                 </ul>
+                <button ng-click="uploadLogFiles()">upload</button>
             </div>
         </form>        
     </div>

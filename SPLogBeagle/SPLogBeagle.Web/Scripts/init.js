@@ -119,14 +119,33 @@
         $scope.uploader = new FileUploader(
             {
                 url: "/home/searchinfile",
-                formData: [{ "pattern": $scope.pattern }],
-                onBeforeUploadItem: function (item) { $scope.isLoading = true; },
+                //filters: [{
+                //    name: 'yourName1',
+                //    // A user-defined filter
+                //    fn: function(item) {
+                //        if (item.file.name.)
+                //        return true;
+                //    }
+                //}],
                 onSuccessItem: function (item, response, status, headers) {
-                    $scope.model = response;
+                    $scope.model.LogFiles.push(response.LogFiles[0]);
+                    $scope.model.ElapsedMilliseconds += response.ElapsedMilliseconds;
                     $scope.isLoading = false;
                 }
             });
+        $scope.uploader.onBeforeUploadItem = function (item) {
+            $scope.isLoading = true;
+            var formData = [
+                { pattern: $scope.pattern },
+                { fileName: item.file.name }
+            ];
+            Array.prototype.push.apply(item.formData, formData);
+        };
 
+        $scope.uploadLogFiles = function () {
+            $scope.model = { LogFiles: [], ElapsedMilliseconds: 0 };
+            $scope.uploader.uploadAll();
+        };
 
         $scope.loadLogFolders();
 
