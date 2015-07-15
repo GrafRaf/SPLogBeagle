@@ -1,0 +1,9 @@
+﻿[
+    { "isChecked": true, "title": "SharePoint Public 2013 - Web Front End 1", "name": "\\\\spp15-wfe1\\logs" },
+    { "isChecked": true, "title": "SharePoint Public 2013 - Web Front End 2", "name": "\\\\spp15-wfe2\\logs" },
+    { "isChecked": true, "title": "SharePoint Public 2013 - Application 2", "name": "\\\\spp15-appl2\\logs" },
+    { "isChecked": true, "title": "SharePoint 2013 - Web Front End 1", "name": "\\\\sp15-wfe1\\logs" },
+    { "isChecked": true, "title": "SharePoint 2013 - Web Front End 2", "name": "\\\\sp15-wfe2\\logs" },
+    { "isChecked": true, "title": "SharePoint 2010 - Web Front End 1", "name": "\\\\sp-wfe1\\logs" },
+    { "isChecked": true, "title": "SharePoint 2010 - Web Front End 2", "name": "\\\\sp-wfe2\\logs" }
+]
