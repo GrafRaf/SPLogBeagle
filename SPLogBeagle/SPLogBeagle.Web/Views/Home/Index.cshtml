@@ -15,8 +15,8 @@
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <h3>Parameters</h3>
             <hr />
-            <label class="control-label"><input type="radio" ng-model="searchType" value="files"> Search acros uploaded files</label><br />
             <label class="control-label"><input type="radio" ng-model="searchType" value="folders"> Search acros predefined location</label><br />
+            <label class="control-label"><input type="radio" ng-model="searchType" value="files"> Search acros uploaded files</label><br />
             <label class="control-label" ng-show="searchType == 'folders'"><input type="checkbox" ng-model="isRemoteLogProcessing"> IsRemoteLogProcessing</label><br />
 
             <div ng-show="searchType == 'folders'">

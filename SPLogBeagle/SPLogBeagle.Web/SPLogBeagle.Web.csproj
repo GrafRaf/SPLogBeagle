@@ -206,6 +206,8 @@
     <Content Include="fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\SPLogBeagle.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\es5-shim.min.js" />
+    <Content Include="Scripts\es6-shim.min.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-er.js" />
     <Content Include="Scripts\i18n\angular-locale_aa-et.js" />
@@ -977,7 +979,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Scripts\version.json" />
-    <Content Include="Scripts\locations-test.json" />
+    <Content Include="Scripts\locations.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

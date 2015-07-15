@@ -54,7 +54,7 @@
             $scope.error = "";
             $http({
                 method: 'GET',
-                url: "/scripts/locations-test.json",  
+                url: "/scripts/locations.json",
                 headers: { 'Content-Type': 'application/json' }
             })
             .success(function (data, status, headers, config) {
@@ -99,6 +99,7 @@
         $scope.uploader = new FileUploader(
             {
                 url: "/home/searchinfile",
+                removeAfterUpload :true,
                 filters: [{
                     name: 'Is .log file',
                     fn: function (item) {
@@ -115,6 +116,7 @@
                     $scope.isLoading = false;
                 }
             });
+
         $scope.uploader.onBeforeUploadItem = function (item) {
             $scope.isLoading = true;
             var formData = [
@@ -132,6 +134,7 @@
         $scope.loadLogFolders();
 
         $scope.search = function () {
+            $scope.model = null;
             if ($scope.searchType === 'folders') {
                 $scope.searchAcrosFolders();
             }
