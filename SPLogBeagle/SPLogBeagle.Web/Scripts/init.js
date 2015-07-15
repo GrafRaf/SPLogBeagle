@@ -54,7 +54,7 @@
             $scope.error = "";
             $http({
                 method: 'GET',
-                url: "/scripts/locations-test.json",
+                url: "/scripts/locations-test.json",  
                 headers: { 'Content-Type': 'application/json' }
             })
             .success(function (data, status, headers, config) {
