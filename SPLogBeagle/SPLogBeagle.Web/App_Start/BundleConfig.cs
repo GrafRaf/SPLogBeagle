@@ -20,6 +20,8 @@ namespace SPLogBeagle.Web
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
+                      "~/Scripts/es5-shim.min.js",
+                      "~/Scripts/es6-shim.min.js",
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/angular.js",
                       "~/Scripts/datetime-picker.min.js",
