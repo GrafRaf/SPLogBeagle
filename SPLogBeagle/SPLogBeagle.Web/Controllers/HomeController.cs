@@ -17,7 +17,7 @@ namespace SPLogBeagle.Web.Controllers
         string TempFilesDirNamePattern { get { return AppSettings["TempFilesDirNamePattern"]; } }
         bool IsRemoteProcessor { get { bool result = false; bool.TryParse(AppSettings["IsRemoteProcessor"], out result); return result; } }
 
-        public ActionResult Index()
+        public ActionResult Index(string searchterm)
         {
             return View();
         }

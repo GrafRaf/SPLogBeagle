@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<os:openServiceDescription
+    xmlns:os="http://www.microsoft.com/schemas/openservicedescription/1.0">
+    <os:homepageUrl>https://github.com/GrafRaf/SPLogBeagle</os:homepageUrl>
+    <os:display>
+        <os:name>SPLogBeagle</os:name>
+        <os:icon>http://www.example.com/favicon.ico</os:icon>
+        <os:description>Searching in SP logs</os:description>
+    </os:display>
+    <os:activity category="Utill">
+        <os:activityAction context="selection">
+            <os:execute action="http://localhost:63909/Home/Index" method="get">
+                <os:parameter name="searchterm" value="{selection}" type="text" /> 
+            </os:execute>
+        </os:activityAction>
+    </os:activity>
+</os:openServiceDescription> 
