@@ -1,0 +1,37 @@
+﻿html
+	head
+		title New item form
+		meta(http-equiv="X-UA-Compatible", content="IE=edge")
+		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+		link(rel="stylesheet", type="text/css", href="../stylesheets/style.css")
+	body
+		div(ng-app="Softage.RiskCard", ng-controller="RiskCardController as RiskCard", ng-form="RiskCard.RiskCardForm", style="top: 85px; clear: both; vertical-align: top; position: absolute;")
+			#overlay(ng-show="RiskCard.isShowProgress")
+			#overlay-progressbar(ng-show="RiskCard.isShowProgress")
+				div
+					img(src="../img/ajax-loader.gif")
+			include ./partials/RiskCard/Common.jade
+			tabset
+				include ./partials/RiskCard/PassportTab.jade
+				include ./partials/RiskCard/PlanGraphTab.jade
+				include ./partials/RiskCard/ReportTab.jade
+				div
+					p {{RiskCard.Error}}
+					p {{RiskCard.ErrorInfo}}
+			input(type="button", value="Сохранить", ng-click="RiskCard.save(RiskCard, RiskCardForm, riskCardForm)", ng-hide="RiskCard.FormType == 'DisplayForm'")
+			input(type="button", value="Отмена", ng-click="RiskCard.cancel()")
+			br
+			br
+			//	| Show developer info:
+				input(type="checkbox", ng-model="RiskCard.isShowDevInfo")
+				br
+			div.col-sm-10.col-xs-10.col-md-10.col-lg-10(ng-show="RiskCard.isShowDevInfo()")
+				| RiskCardModel errors: {{RiskCard.RiskCardForm.$error}}
+				br
+				br
+				| RiskCardModel: {{RiskCard.model}}
+				br
+				br
+				| Lists: {{RiskCard.lists}}
+
+		script(src="../scripts/init.js")

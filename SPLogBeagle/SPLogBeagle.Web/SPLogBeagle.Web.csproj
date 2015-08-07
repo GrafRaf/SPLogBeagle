@@ -146,8 +146,26 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\ui-grid.svg" />
+    <Content Include="front\app.js" />
+    <Content Include="front\gulpfile.js" />
+    <Content Include="front\karma.conf.js" />
+    <Content Include="front\src\app\angular-locale_ru-ru.js" />
+    <Content Include="front\src\app\controllers.js" />
+    <Content Include="front\src\app\init.js" />
+    <Content Include="front\src\app\services-fake.js" />
+    <Content Include="front\src\assets\img\1.png" />
+    <Content Include="front\src\assets\img\2.png" />
+    <Content Include="front\src\assets\img\3.png" />
+    <Content Include="front\src\assets\img\ajax-loader.gif" />
+    <Content Include="front\src\assets\img\folder.gif" />
+    <Content Include="front\src\assets\img\formatmap16x16.png" />
+    <Content Include="front\src\assets\img\spcommon.png" />
+    <Content Include="front\src\assets\stylesheets\bootstrap.min.css" />
+    <Content Include="front\src\assets\stylesheets\corev15.css" />
+    <Content Include="front\start.js" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="gulpfile.js" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-aria.js" />
@@ -204,6 +222,37 @@
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="package.json" />
+    <Content Include="front\.bowerrc" />
+    <Content Include="front\.jshintrc" />
+    <Content Include="front\bower.json" />
+    <Content Include="front\package.json" />
+    <Content Include="front\README.md" />
+    <Content Include="front\src\assets\stylesheets\style.stylus" />
+    <Content Include="front\src\assets\templates\DisplayForm.jade" />
+    <Content Include="front\src\assets\templates\EditForm.jade" />
+    <Content Include="front\src\assets\templates\Index.jade" />
+    <Content Include="front\src\assets\templates\NewForm.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\Common.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\ListItem.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\mixins.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\PassportTab-BottomPanel.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\PassportTab-FormStructRiskMngmntProc.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\PassportTab-GeneralInfo.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\PassportTab-Indicators.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\PassportTab-Responsibles.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\PassportTab-RiskScore.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\PassportTab.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\PlanGraphTab.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\ReportTab-CostEffectiveness.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\ReportTab-ImplementationInfo.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\ReportTab-Monitoring.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\ReportTab-Plan.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\ReportTab-Results.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\ReportTab.jade" />
+    <Content Include="front\src\assets\templates\partials\RiskCard\Step.jade" />
+    <Content Include="front\src\assets\templates\responsibles.jade" />
+    <Content Include=".jshintrc" />
     <None Include="Properties\PublishProfiles\SPLogBeagle.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\es5-shim.min.js" />
@@ -951,7 +1000,7 @@
     <Content Include="Scripts\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\i18n\angular-locale_zu.js" />
-    <Content Include="Scripts\init.js" />
+    <Content Include="app\scripts\init.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -963,7 +1012,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Content\SPLogBeagle.Accelerator.xml" />
+    <Content Include="Content\SPLogBeagle.Accelerator.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -983,6 +1034,8 @@
     <Content Include="Scripts\locations.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="front\build\" />
+    <Folder Include="front\src\assets\fonts\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,74 @@
+﻿- var prefix = "pasporttab_indicators"
+include mixins.jade
+accordion-group(heading="Индикатор для количественной оценки и мониторинга риска")
+	label Индикатор для количественной оценки и мониторинга риска &nbsp;
+	+addItemBtn(prefix, "RiskCard.model.Indicators", "Indicators")
+	br
+	table.table.table-condensed
+		thead
+			tr
+				th(width="25px",rowspan="2") №
+				th(rowspan="2") Наименование индикатора
+				th(rowspan="2") Ед.изм.
+				th(rowspan="2") Периодичность измерения индикатора
+				th(colspan="2") Диапазон значений для безрисковой зоны
+				th(colspan="2") Диапазон значений для умеренной зоны
+				th(rowspan="2")
+			tr
+				th Минимальное значение
+				th Максимальное значение
+				th Минимальное значение
+				th Максимальное значение
+		tbody
+			tr(ng-repeat="indicator in RiskCard.model.Indicators | filter:{IsDeleted:!true}")
+				td {{$index+1}}
+				td
+					+tableFormControlTextarea(prefix, "indicator.Title", "Title", "{{$index}}")
+				td
+					+tableFormControlSelectWithCustomVariants(prefix, "indicator.Measure", "measureid", "{{$index}}", "measure for measure in RiskCard.lists.Measures", 
+					"indicator.CustomMeasure", "indicator.IsCustomMeasure", 
+					"indicator.Measure = (indicator.Measure ? indicator.Measure : ((RiskCard.lists.Measures | filter:{ $: 'руб.'}:true)||[])[0])",
+					"(indicator.IsCustomMeasure == true)")
+				td
+					+tableFormControlSelect(prefix, "indicator.ChangingPeriodId", "changingperiodid", "{{$index}}", "cp as cp for cp in RiskCard.lists.ChangingPeriods")
+				td
+					+tableFormControlNumberOnlyInput(prefix, "indicator.RiskOutMin", "RiskOutMin", "{{$index}}", 3, "RiskCard.refreshProbability()")
+				td
+					+tableFormControlNumberOnlyInput(prefix, "indicator.RiskOutMax", "RiskOutMax", "{{$index}}", 3, "RiskCard.refreshProbability()")
+				td
+					+tableFormControlNumberOnlyInput(prefix, "indicator.RiskMedMin", "RiskMedMin", "{{$index}}", 3, "RiskCard.refreshProbability()")
+				td
+					+tableFormControlNumberOnlyInput(prefix, "indicator.RiskMedMax", "RiskMedMax", "{{$index}}", 3, "RiskCard.refreshProbability()")
+				td
+					+removeBtn(prefix, "indicator", "Indicators")
+
+	span.error(ng-show="RiskCard.getListErrorMessage(RiskCard.model.Indicators, 'Indicators')") {{RiskCard.getListErrorMessage(RiskCard.model.Indicators, 'Indicators')}}
+	
+
+//
+	2.	Раздел 2 - «Индикатор для количественной оценки и мониторинга риска», который 
+	в свою очередь включает в себя таблицу, состоящую из 8 колонок (см. таблицу 15). 
+	Строки колонки «№» заполняются автоматически (от 1 до 5). При нажатии на кнопку «+добавить строку», отображается строка №3 и т.д. 
+	Максимальное количество добавляемых строк не должно превышать 5. Строки колонки «Наименование индикатора» имеют тип поля – многострочный текст. 
+	По умолчанию в таблице отображено 2 строки. Первая строка таблицы является обязательной для заполнения. 
+	Строки колонки «Ед. изм.» имеют тип поля - Выбор (меню). Разрешить пользователям добавлять варианты. 
+	Значение по умолчанию – руб.
+	Варианты выбора:
+		%
+		руб.
+		объект
+		руб./тонна
+		руб./чел.
+		шт.
+		Гкал
+		Гкал/ч
+		Гц
+		кВ
+		кВА
+		КВтч
+		Мвар
+		МВт
+	Строки колонки «Периодичность измерения индикатора» имеют тип поля - Выбор (меню). 
+	Варианты выбора: ежемесячная, ежеквартальная. Строки колонок «Диапазон значений для безрисковой зоны/ Минимальное значение», 
+	«Диапазон значений для безрисковой зоны/ Максимальное значение», «Диапазон значений для умеренной зоны/Минимальное значение», 
+	«Диапазон значений для умеренной зоны/ Максимальное значение» имеют тип поля - Число (1; 1,0; 100), Число знаков после запятой – 3.

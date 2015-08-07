@@ -7,96 +7,98 @@
 
 
     function LogViewController($http, $scope, FileUploader) {
-        $scope.isLoading = true;
-        $scope.logFolders = [];
+        
         var dt = new Date();
-        $scope.startDate = dt;
-        $scope.finishDate = dt;
-        $scope.searchType = 'folders';
-        $scope.pattern = "Exception";
-        $scope.vTimestamp = true;
-        $scope.vMessage = true;
-        $scope.vCorrelationUid = true;
+        var vm = this;
+        vm.isLoading = true;
+        vm.logFolders = [];
+        vm.startDate = dt;
+        vm.finishDate = dt;
+        vm.searchType = 'folders';
+        vm.pattern = "Exception";
+        vm.vTimestamp = true;
+        vm.vMessage = true;
+        vm.vCorrelationUid = true;
 
-        $scope.open = {
+        vm.open = {
             startDate: false,
             finishDate: false
         };
 
-        $scope.dateOptions = {
+        vm.dateOptions = {
             showWeeks: false,
             startingDay: 1
         };
 
-        $scope.timeOptions = {
+        vm.timeOptions = {
             showMeridian: false
         };
 
-        $scope.openCalendar = function (e, date) {
+        vm.openCalendar = function (e, date) {
             e.preventDefault();
             e.stopPropagation();
 
-            $scope.open[date] = true;
+            vm.open[date] = true;
         };
 
-        $scope.isSMILEnabled = function () {
+        vm.isSMILEnabled = function () {
             return Modernizr.smil;
         };
 
-         $scope.getLogFolders = function () {
+         vm.getLogFolders = function () {
             var result = [];
-            $scope.logFolders.forEach(function (e) { if (e.isChecked) { result.push(e.name) } });
+            vm.logFolders.forEach(function (e) { if (e.isChecked) { result.push(e.name) } });
             return result;
         };
 
-        $scope.loadLogFolders = function () {
-            $scope.isLoading = true;
-            $scope.error = "";
+        vm.loadLogFolders = function () {
+            vm.isLoading = true;
+            vm.error = "";
             $http({
                 method: 'GET',
                 url: "/scripts/locations.json",
                 headers: { 'Content-Type': 'application/json' }
             })
             .success(function (data, status, headers, config) {
-                $scope.logFolders = data;
-                $scope.isLoading = false;
+                vm.logFolders = data;
+                vm.isLoading = false;
             })
             .error(function (data, status, headers, config) {
                 var msg = 'Request failed. ' + data + '\n' + status + '\n' + headers + '\n' + config;
                 console.log(data);
-                $scope.error = msg;
-                $scope.isLoading = false;
+                vm.error = msg;
+                vm.isLoading = false;
             });
         }
 
-        $scope.searchAcrosFolders = function () {
-            $scope.isLoading = true;
-            $scope.error = "";
+        vm.searchAcrosFolders = function () {
+            vm.isLoading = true;
+            vm.error = "";
             $http({
                 method: 'GET',
                 url: "/home/find",
                 params: {
-                    "startDate": $scope.startDate, //$scope.getDateTime($scope.startDate, $scope.startTime),
-                    "finishDate": $scope.finishDate, //$scope.getDateTime($scope.finishDate, $scope.finishTime),
-                    "pattern": $scope.pattern,
-                    "isRemoteLogProcessing": $scope.isRemoteLogProcessing ? true : false,
-                    "logFolders": $scope.getLogFolders()
+                    "startDate": vm.startDate, //$scope.getDateTime($scope.startDate, $scope.startTime),
+                    "finishDate": vm.finishDate, //$scope.getDateTime($scope.finishDate, $scope.finishTime),
+                    "pattern": vm.pattern,
+                    "isRemoteLogProcessing": vm.isRemoteLogProcessing ? true : false,
+                    "logFolders": vm.getLogFolders()
                 },
                 headers: { 'Content-Type': 'application/json' }
             }).
                 success(function (data, status, headers, config) {
-                    $scope.model = data;
-                    $scope.isLoading = false;
+                    vm.model = data;
+                    vm.isLoading = false;
                 }).
                 error(function (data, status, headers, config) {
                     var msg = 'Request failed. ' + data + '\n' + status + '\n' + headers + '\n' + config;
                     console.log(data);
-                    $scope.error = msg;
-                    $scope.isLoading = false;
+                    vm.error = msg;
+                    vm.isLoading = false;
                 });
         }
 
-        $scope.uploader = new FileUploader(
+        vm.uploader = new FileUploader(
             {
                 url: "/home/searchinfile",
                 removeAfterUpload :true,
@@ -111,14 +113,14 @@
                     }
                 }],
                 onSuccessItem: function (item, response, status, headers) {
-                    $scope.model.LogFiles.push(response.LogFiles[0]);
-                    $scope.model.ElapsedMilliseconds += response.ElapsedMilliseconds;
-                    $scope.isLoading = false;
+                    vm.model.LogFiles.push(response.LogFiles[0]);
+                    vm.model.ElapsedMilliseconds += response.ElapsedMilliseconds;
+                    vm.isLoading = false;
                 }
             });
 
-        $scope.uploader.onBeforeUploadItem = function (item) {
-            $scope.isLoading = true;
+        vm.uploader.onBeforeUploadItem = function (item) {
+            vm.isLoading = true;
             var formData = [
                 { pattern: $scope.pattern },
                 { fileName: item.file.name }
@@ -126,24 +128,24 @@
             Array.prototype.push.apply(item.formData, formData);
         };
 
-        $scope.searchAcrosFiles = function () {
-            $scope.model = { LogFiles: [], ElapsedMilliseconds: 0 };
-            $scope.uploader.uploadAll();
+        vm.searchAcrosFiles = function () {
+            vm.model = { LogFiles: [], ElapsedMilliseconds: 0 };
+            vm.uploader.uploadAll();
         };
 
-        $scope.loadLogFolders();
+        vm.loadLogFolders();
 
-        $scope.search = function () {
-            $scope.model = null;
-            if ($scope.searchType === 'folders') {
-                $scope.searchAcrosFolders();
+        vm.search = function () {
+            vm.model = null;
+            if (vm.searchType === 'folders') {
+                vm.searchAcrosFolders();
             }
-            if ($scope.searchType === 'files') {
-                $scope.searchAcrosFiles();
+            if (vm.searchType === 'files') {
+                vm.searchAcrosFiles();
             }
         };
 
-        $scope.isLoading = false;
+        vm.isLoading = false;
     }
 
 })();
