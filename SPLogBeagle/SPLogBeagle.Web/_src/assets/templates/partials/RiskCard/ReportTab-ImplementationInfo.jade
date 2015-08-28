@@ -1,0 +1,123 @@
+﻿- var prefix = "reporttab_implementationsinfo"
+include mixins.jade
+
+accordion-group(heading="Информация о реализации риска")
+
+	// 3.	Раздел 3 - «Информация о реализации риска», который в свою очередь включает следующие подразделы:
+	// Риск реализован. В поле «Риск реализован» располагается элемент управления - «Флажок». 
+	// Значение в снятом состоянии – «Риск не реализовался», значение в установленном состоянии – «Риск реализовался».
+	input(type="checkbox", ng-model="RiskCard.model.IsRiskRealized", ng-change="RiskCard.checkCostEffectivenessResults()")
+	| Риск реализован
+	br
+	// таблицу, состоящую из 11 колонок (см. таблицу 20). 
+	// По умолчанию в таблице отображена 1 строка. При нажатии на кнопку «+добавить строку», отображается строка №3 и т.д. 
+	// Максимальное количество добавляемых строк не должно превышать 12. 
+	// Таблица 20
+	// Информация о реализации риска
+	// №	Наименование 	Месяц 		Количественная оценка влияния риска, руб.			Причина				Мероприятия, выполненные по		Извлеченные уроки и рекомендации
+	//		риска			реализации 														реализации риска	устранению последствий 
+	//						риска																				реализованного риска
+	//
+	//									План	План*	Факт	Факт*	Отклонение 
+	//																	от плана, руб.
+	// 1	 	 	 	 	 	 	 	 	 	 
+	// +добавление сроки 	 	 	 	 	 	 	 	 
+	// prfix - префикс раздела
+	// model - модель, передаваемая в функцию добавления нового элемента
+	// listName - имя списка, передаём, чтобы определить видимость кнопки добавления
+	| Информация о реализации риска&nbsp;
+	+addItemBtn(prefix, "RiskCard.model.ImplementedRisksOrOpportunites", "ImplementedRisksOrOpportunites")
+	table.table.table-condensed
+		thead
+			tr
+				th(rowspan=2) 
+					| №
+				th(rowspan=2) 
+					| Наименование риска
+				th(rowspan=2)
+					| Месяц
+					br
+					| реализации
+					br
+					| риска
+				th(colspan=3) 
+					| Количественная оценка влияния риска, руб.
+				th(rowspan=2)
+					| Причина
+					br
+					| реализации риска
+				th(rowspan=2)
+					| Мероприятия, выполненные по
+					br
+					| устранению последствий
+					br
+					| реализованного риска
+				th(rowspan=2) 
+					| Извлеченные уроки и рекомендации
+			tr
+				th План
+				th Факт
+				th
+					| Отклонение
+					br
+					| от плана, руб.
+		tbody
+			tr(ng-repeat="IRoO in RiskCard.model.ImplementedRisksOrOpportunites | filter:{IsDeleted:!true}")
+				// Строки колонки «№» заполняются автоматически (от 1 до 12). 
+				td {{$index+1}}
+				// Поля колонки «Наименование индикатора» соответствуют полям «Наименование индикатора» вкладки «Паспорт риска». 
+				// Поля «Наименование индикатора» вкладки «Отчет об управлении риском» доступны только для чтения. 
+				// Alyona Kozhak-ina:   соответствует поплю "Наименование риска" вкладки «Паспорт риска».
+				td {{RiskCard.model.Name}}
+				// Поля колонки «Месяц реализации риска» имеют тип поля - подстановка (данные, уже имеющиеся на этом сайте). 
+				// Источник данных – список «Справочник «Месяц», который содержит следующую информацию: 
+				// Январь, Февраль, Март, Апрель, Май, Июнь, Июль, Август, Сентябрь, Октябрь, Ноябрь, Декабрь. 
+				td 
+					+tableFormControlSelect(prefix, "IRoO.Month", "month", "{{$index}}", "month for month in RiskCard.lists.Months")
+				// Поля колонки «Количественная оценка влияния риска, руб. (План)» соответствует полю «Количеств. оценка влияния риска, руб.» вкладки «Паспорт риска». 
+				// Поля колонки «Количественная оценка влияния риска, руб. (План)*» соответствует полю «Количеств. оценка влияния риска, руб.*» вкладки «Паспорт риска». 
+				// Поле не отображено в представлении. 
+				td {{RiskCard.model.QARiskEffect}}
+				// Поля колонки «Количественная оценка влияния риска, руб. (Факт)» имеют тип поля – Число (1; 1,0; 100), Число знаков после запятой – 2. 
+				// Поля колонки «Количеств. оценка влияния риска, руб. (Факт)*» - имеет тип поля – Вычисляемый (вычисление по другим столбцам). 
+				// Если в поле «Угроза/Возможность» указано значение «Угроза», 
+				//	то в данное поле проставляется значение равное полю «Количеств. оценка влияния риска, руб. (Факт)» со знаком «минус». 
+				// Поле не отображено в представлении. 
+				td 
+					+tableFormControlNumberOnlyInput(prefix, "IRoO.QARiskEffectFact", "QARiskEffectFact", "{{$index}}", 2)
+					span.error(ng-show="RiskCard.getQARiskEffectFactInvalidMessage(IRoO)") {{RiskCard.getQARiskEffectFactInvalidMessage(IRoO)}}
+				// Поле «Отклонение от плана, руб.» тип поля - Вычисляемый (вычисление по другим столбцам), тип данных - Число (1; 1,0; 100), показывать в процентах. 
+				// Поле «Отклонение от плана, руб.» рассчитывается следующим образом: 
+				//	если в поле «Месяц реализации риска» <> 0 и в поле «Угроза/возможность» значение равно «Угроза», 
+				//		то формула расчета следующая – ([План*] – [Факт*]). 
+				//	Если в поле «Месяц реализации риска» <> 0 и в поле «Угроза/возможность» значение равно «Возможность», 
+				//		то формула расчета следующая – ([Факт*] – [План*]). 
+				td {{RiskCard.getIRoODeviationFromPlan(IRoO)}}
+				// Поля колонки «Причина реализации риска» имеют тип поля многострочный текст. 
+				td
+					+tableFormControlTextarea(prefix, "IRoO.RiskImplementationReason", "RiskImplementationReason", "{{$index}}")
+					span.error(ng-show="RiskCard.getRiskImplementationReasonInvalidMessage(IRoO)") {{RiskCard.getRiskImplementationReasonInvalidMessage(IRoO)}}
+				// Поля колонки «Мероприятия, выполненные по устранению последствий реализованного риска» имеют тип поля многострочный текст. 
+				td
+					+tableFormControlTextarea(prefix, "IRoO.MeasuresToEliminate", "MeasuresToEliminate", "{{$index}}")
+					span.error(ng-show="RiskCard.getMeasuresToEliminateInvalidMessage(IRoO)") {{RiskCard.getMeasuresToEliminateInvalidMessage(IRoO)}}
+				// Поля колонки «Извлеченные уроки и рекомендации» имеют тип поля многострочный текст. 
+				td
+					+tableFormControlTextarea(prefix, "IRoO.LessonsLearned", "LessonsLearned", "{{$index}}")
+					span.error(ng-show="RiskCard.getLessonsLearnedInvalidMessage(IRoO)") {{RiskCard.getLessonsLearnedInvalidMessage(IRoO)}}
+				td
+					+removeBtn(prefix, "IRoO", "ImplementedRisksOrOpportunites")
+
+	//+formControlSelect(prefix, "RiskCard.model.ReportYear", "ReportYear", "Отчётный год", "year for year in RiskCard.lists.ReportYears")
+	//+formControlTextarea(prefix, "RiskCard.model.Name", "Name", "Наименование риска")
+	//+formControlTextarea(prefix, "RiskCard.model.Description", "Description", "Описание риска")
+	//+formControlSelect(prefix, "RiskCard.model.SocietyId", "SocietyId", "Общество", "society.Id as society.Title for society in RiskCard.lists.Society")
+	//+formControlSelect(prefix, "RiskCard.model.ManagementId", "ManagementId", "Дирекция", "management.Id as management.Title for management in RiskCard.lists.Managements | filter: { SocietyId: RiskCard.model.SocietyId}")
+	//+formControlSelect(prefix, "RiskCard.model.RiskKindId", "RiskKind", "Вид риска по источнику возникновения", "rk.Id as rk.Title for rk in RiskCard.lists.RiskKinds")
+	//+formControlSelect(prefix, "RiskCard.model.RiskGroupId", "RiskGroup", "Группа риска", "rg.Id as rg.Title for rg in RiskCard.lists.RiskGroups | filter: { RiskKindId: RiskCard.model.RiskKindId}")
+	//+formControlSelect(prefix, "RiskCard.model.AreaBusinessProcessId", "AreaBusinessProcess", "Область/Бизнес-процесс", "rg.Id as rg.Title for rg in RiskCard.lists.AreaBusinessProcesses | filter: { RiskGroupId: RiskCard.model.RiskGroupId}")
+	//+formControlSelect(prefix, "RiskCard.model.ThreatOpportunityId", "ThreatOpportunity", "Угроза/возможность", "to.Id as to.Title for to in RiskCard.lists.ThreatOpportunities")
+	//+formControlSelect(prefix, "RiskCard.model.RiskResponseStrategyId", "RiskResponseStrategy", "Стратегия реагирования на риск", "rrs.Id as rrs.Title for rrs in RiskCard.lists.RiskResponseStrategies")
+	//+formControlSelect(prefix, "RiskCard.model.UnacceptableRiskId", "UnacceptableRisk", "Неприемлемые риски", "ur.Id as ur.Title for ur in RiskCard.lists.UnacceptableRisks")
+	//+formControlSimpleTable(prefix, "RiskCard.model.RiskFactors", "Title", "Причины риска",  "rf", "RiskFactors", "Причины риска")
+	//+formControlSimpleTable(prefix, "RiskCard.model.ConsequencesOfRisk", "Title", "Последствия риска", "cor", "ConsequencesOfRisk", "Последствия риска")

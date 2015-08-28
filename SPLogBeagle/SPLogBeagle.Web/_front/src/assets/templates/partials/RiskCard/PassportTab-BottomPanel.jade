@@ -1,0 +1,7 @@
+﻿a(href="/_layouts/15/Softage.Handlers/DocumentHandler.ashx?type=StartDocument&projectId={{model.project.Id}}", class="document-button") Приказ о начале работ по проекту
+a(href="/_layouts/15/Softage.Handlers/DocumentHandler.ashx?type=RestartDocument&projectId={{model.project.Id}}", class="document-button") Приказ о повторном запуске проекта
+a(href="/_layouts/15/Softage.Handlers/DocumentHandler.ashx?type=RegulationsDocument&projectId={{model.project.Id}}", class="document-button") Устав проекта
+a(href="/_layouts/15/Softage.Handlers/DocumentHandler.ashx?type=PlanDocument&projectId={{model.project.Id}}", class="document-button") План-график проекта
+input(ng-show="model.formType==1", type="button", value="Сохранить", ng-click="createProject(1)", class="btn btn-primary")
+input(ng-show="model.formType==2", type="button", value="Сохранить", ng-click="updateProject(1)", class="btn btn-primary")
+input(type="button", value="Отмена", ng-click="cancel(1)", class="btn btn-primary")

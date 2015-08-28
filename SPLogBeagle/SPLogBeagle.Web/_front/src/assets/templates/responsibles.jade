@@ -1,0 +1,56 @@
+﻿html
+	head
+		title Index page
+		meta(http-equiv="X-UA-Compatible", content="IE=edge")
+		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+		link(rel="stylesheet", type="text/css", href="../stylesheets/bootstrap.min.css")
+		link(rel="stylesheet", type="text/css", href="../stylesheets/style.css")
+	body
+		div(ng-app="Softage.RiskCard", ng-controller="RiskCardController as RiskCard", ng-form="RiskCard.RiskCardForm", style="top: 85px; clear: both; vertical-align: top; position: absolute;")
+			include ./partials/RiskCard/Common.jade
+			mixin step(isSubStep)
+				td
+					+reponsiblesControl(prefix, "item.Responsibles", "StepResponsibles", $$index, "RiskCard.lists.Users", "item","true")
+
+			mixin subSteps()
+				tr(ng-repeat="child in item.Childs | filter:{IsDeleted:!true}")
+					td
+						+reponsiblesControl(prefix, "child.Responsibles", "StepResponsibles", $$index, "RiskCard.lists.Users", "child","true")
+
+			// prfix - префикс раздела
+			// model - ng-model
+			// filed - имя поля, чтобы определить обязательность, доступность
+			// index - индекс, для полей в списках
+			// options - ng-options expression
+			// +reponsiblesControl(prefix, "item.ResponsibleUserInfoId", "StepResponsibleUserInfoId", "", "responsible.Id as responsible.Title for responsible in RiskCard.lists.Users", "item","true")
+			// +reponsiblesControl(prefix, "item.Responsibles", "StepResponsibles, "", "responsible.Id as responsible.Title for responsible in RiskCard.lists.Users", "item","true")
+			mixin reponsiblesControl(prefix, model, field, index, usersList, item, change)
+				- var id  = prefix + "_" + field.toLowerCase() + index
+				- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "')"
+				- var ro  = "false"
+				// "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "'," + item + ")"
+				- var users = "user as user.Title for user in " + usersList
+				- var selectedUsers = "user in " + model
+				- var currentUser = item + ".currentUser"
+				- var addUser = "RiskCard.addUser(" + currentUser + "," + model + ")"
+				- var removeUser = "RiskCard.removeUser(user," + model + ")"
+
+				.input-group(ng-hide= ro)
+					select.form-control(ng-model= currentUser, ng-options= users, name= id, ng-required= req, ng-disabled= ro, ng-change= change)
+						option(value="") Значение не выбрано
+					span.input-group-addon(ng-disabled="currentUser.IsAdded", ng-click= addUser)
+						img(src="/_layouts/15/images/AddHero.20x20x32.png")
+				div(ng-repeat= selectedUsers, ng-class="{'input-group':!isReadOnly()}")
+					input.form-control(readonly, ng-model="user.Title")
+					span.input-group-addon(ng-hide= ro, ng-click= removeUser)
+						img(src="/_layouts/15/images/delete.gif")
+
+			div(heading="План-график", active="tab2", ng-controller="RiskPlanGraphController as PlanGraph")
+				label План график &nbsp;
+				table.table.table-hover.table-condensed
+					tbody(ng-repeat="item in RiskCard.model.Steps | filter:{ IsDeleted:!true}")
+						+step(false)
+						tr(ng-repeat="child in item.Childs | filter:{IsDeleted:!true}")
+							+step(true)
+
+		script(src="../scripts/init.js")

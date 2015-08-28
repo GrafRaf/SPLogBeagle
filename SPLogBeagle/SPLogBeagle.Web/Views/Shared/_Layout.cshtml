@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - SPLogBeagle</title>
-    @Styles.Render("~/Content/css")
+    @*@Styles.Render("~/Content/css")*@
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
@@ -26,8 +27,8 @@
             <p>&copy; @DateTime.Now.Year - SharePoint log beagle application</p>
         </footer>
     </div>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/js")
+    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/js")*@
     @RenderSection("scripts", required: false)
 </body>
 </html>
