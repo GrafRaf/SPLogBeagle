@@ -1,0 +1,76 @@
+﻿.measure
+	min-width 100px
+
+.error
+	color red
+
+.invalidView
+	background-color red !important
+
+.form-control.ng-invalid-required
+	border-color red
+
+h1#pageTitle
+    display none
+
+#overlay	
+	position fixed
+	top 0
+	right 0
+	bottom 0
+	left 0
+	opacity 0.2
+	z-index 100
+
+#overlay-progressbar
+	left 0
+	right 0
+	top 0
+	bottom 0
+	position fixed
+	z-index 101
+	opacity 1
+	text-align center
+
+#overlay-progressbar div
+	opacity 1
+	margin-top 287px
+	width 500px
+
+
+
+.validReport
+	font-style italic
+	color #444
+	font-family "Segoe UI","Segoe",Tahoma,Helvetica,Arial,sans-serif
+	font-size 15px
+	float right
+	color Red
+
+a.document-button
+	background-color #fdfdfd
+	border 1px solid #ababab
+	color #444
+	font-family "Segoe UI","Segoe",Tahoma,Helvetica,Arial,sans-serif
+	font-size 11px
+	border-bottom 3px solid #ababab
+	padding 7px 10px
+	text-decoration none
+	display inline-block
+
+a.document-button:hover 
+	background-color #e6f2fa
+	border-color #92c0e0
+
+ang-dt-picker-common .form-control, ang-dt-picker-common-act .form-control, ang-dt-picker .form-control
+	width 85px
+
+.indicators 
+	input[type="text"]
+		width 70px
+		display inline
+.panel-body
+	overflow-x auto
+
+div 
+	max-width 1000px

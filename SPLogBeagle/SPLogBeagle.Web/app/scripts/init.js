@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module("SPLogBeagle", ['ui.bootstrap', 'ui.bootstrap.datetimepicker', 'angularFileUpload'])
+        .module("SPLogBeagle", ['ngMaterial', 'angularFileUpload'])
         .controller("LogViewController", LogViewController);
 
 
@@ -122,7 +122,7 @@
         vm.uploader.onBeforeUploadItem = function (item) {
             vm.isLoading = true;
             var formData = [
-                { pattern: $scope.pattern },
+                { pattern: vm.pattern },
                 { fileName: item.file.name }
             ];
             Array.prototype.push.apply(item.formData, formData);

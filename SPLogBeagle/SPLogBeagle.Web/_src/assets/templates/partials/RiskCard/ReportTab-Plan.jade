@@ -1,0 +1,32 @@
+﻿- var prefix = "reporttab_plan"
+include mixins.jade
+
+accordion-group(heading="План мероприятий по управлению риском")
+
+	// 2.Раздел 2 – «План мероприятий по управлению риском», который в свою очередь включает следующие подразделы:
+	// Фактические затраты на реализацию плана мероприятий, руб. - имеет тип поля – Число (1; 1,0; 100), Число знаков после запятой – 2.
+	+formControlNumberOnlyInput(prefix, "RiskCard.model.ActualCostsImplementingAct", "ActualCostsImplementingAct", "Фактические затраты на реализацию плана мероприятий", 2)
+	// таблицу, состоящую из 3 колонок (см. таблицу 19). 
+	// Таблица 19. 
+	// Выполнение плана мероприятий по управлению риском
+	//  						Выполнен в полном объеме	Наличие отклонений от плана
+	// План по профилактике	 
+	// План по реагированию	
+	table.table
+		tbody
+			tr
+				td
+				td Выполнен в полном объеме
+				td Наличие отклонений от плана
+			tr
+				td План по профилактике
+				td 
+					input(type="checkbox", ng-checked="RiskCard.isPlanForPreventionComplete()", disabled)
+				td 
+					input(type="checkbox", ng-checked="RiskCard.isPlanForPreventionHasDeviations()", disabled)
+			tr
+				td План по реагированию
+				td 
+					input(type="checkbox", ng-checked="RiskCard.isReponsePlanComplete()", disabled)
+				td 
+					input(type="checkbox", ng-checked="RiskCard.isReponsePlanHasDeviations()", disabled)

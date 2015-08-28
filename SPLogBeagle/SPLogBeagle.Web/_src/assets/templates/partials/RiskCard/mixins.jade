@@ -1,0 +1,635 @@
+﻿// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// index - индекс, для полей в списках
+// decimalNumbers - знаков после запятой
+mixin tableFormControlNumberOnlyInput(prefix, model, field, index, decimalNumbers, change)
+	- var id  =  prefix + "_" + field.toLowerCase() + index
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "')"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "')"
+	if (change)
+		input.form-control(type="text", ng-model= model, ng-attr-id= id, name= id, number-only-input, decimal-numbers= decimalNumbers, ng-change= change, ng-required= req, ng-disabled= ro)
+	else 
+		input.form-control(type="text", ng-model= model, ng-attr-id= id, name= id, number-only-input, decimal-numbers= decimalNumbers, ng-required= req, ng-disabled= ro)
+
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// title - текст лейбла для инпута
+// decimalNumbers - знаков после запятой
+mixin formControlNumberOnlyInput(prefix, model, field, title, decimalNumbers)
+	- var id  = prefix + "_" + field.toLowerCase()
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "')"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "')"
+	label= title
+	br
+	input.form-control(type="text", ng-model= model, ng-attr-id= id, name= id, number-only-input, decimal-numbers= decimalNumbers, ng-required= req, ng-disabled= ro)
+
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// index - индекс, для полей в списках
+// tableFormControlText(prefix, "child.ReasonLate", "StepReasonLate", "{{$index}}", "PlanGraph.refreshSubStepFields(child, item)","child")
+mixin tableFormControlText(prefix, model, field, index, change, item)
+	- var id  =  prefix + "_" + field.toLowerCase() + index
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "'," + item + ")"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "'," + item + ")"
+	if (change)
+		input.form-control(type="text", ng-model= model, ng-attr-id= id, name= id, ng-required= req, ng-disabled= ro, ng-change= change)
+	else
+		input.form-control(type="text", ng-model= model, ng-attr-id= id, name= id, ng-required= req, ng-disabled= ro)
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// title - текст лейбла для инпута
+mixin formControlText(prefix, model, field, title, change)
+	- var id  = prefix + "_" + field.toLowerCase()
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "')"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "')"
+	label= title
+	br
+	if (change)
+		input.form-control(type="text", ng-model= model, ng-attr-id= id, name= id, ng-change= change, ng-required= req, ng-disabled= ro)
+	else
+		input.form-control(type="text", ng-model= model, ng-attr-id= id, name= id, ng-required= req, ng-disabled= ro)
+
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// index - индекс, для полей в списках
+// options - ng-options expression
+mixin tableFormControlSelect(prefix, model, field, index, options, item, nginit, change)
+	- var id  = prefix + "_" + field.toLowerCase() + index
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "')"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "'," + item + ")"
+	if nginit
+		if change
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro, ng-init= nginit, ng-change= change)
+				option(value="") Значение не выбрано
+		else
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro, ng-init= nginit)
+				option(value="") Значение не выбрано
+	else
+		if change
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro, ng-change= change)
+				option(value="") Значение не выбрано
+		else
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro)
+				option(value="") Значение не выбрано
+
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// index - индекс, для полей в списках
+// options - ng-options expression
+// +reponsiblesControl(prefix, "item.ResponsibleUserInfoId", "StepResponsibleUserInfoId", "", "responsible.Id as responsible.Title for responsible in RiskCard.lists.Users", "item","true")
+// +reponsiblesControl(prefix, "item.Responsibles", "StepResponsibles, "", "responsible.Id as responsible.Title for responsible in RiskCard.lists.Users", "item","true")
+mixin reponsiblesControl(prefix, model, field, index, usersList, item, change)
+	- var id  = prefix + "_" + field.toLowerCase() + index
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "'," + item + ")"
+	- var cl = "{'form-control ng-invalid-required': RiskCard.isFieldRequired('" + prefix + "','" + id + "'," + item + ")}"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "'," + item + ")"
+	- var req_not_ro  = req + " && !" + ro 
+	- var users = "user as user.Title for user in " + usersList
+	- var selectedUsers = "user in " + model
+	- var currentUser = item + ".currentUser"
+	- var addUser = "RiskCard.addUser(" + currentUser + "," + model + ")"
+	- var removeUser = "RiskCard.removeUser(user," + model + ")"
+
+	.input-group(ng-hide= ro)
+		select.form-control(ng-model= currentUser, ng-class= cl,  ng-options= users, name= id, ng-required= req, ng-disabled= ro, ng-change= change)
+			option(value="") Значение не выбрано
+		span.input-group-addon(ng-disabled="currentUser.IsAdded", ng-click= addUser)
+			img(src="/_layouts/15/images/AddHero.20x20x32.png")
+	span.error(ng-show= req_not_ro) Поле не заполнено
+	input.form-control(type="text", disabled, ng-show= ro)
+	div(ng-repeat= selectedUsers, ng-class="{'input-group':!isReadOnly()}")
+		input.form-control(readonly, ng-model="user.Title")
+		span.input-group-addon(ng-hide= ro, ng-click= removeUser)
+					img(src="/_layouts/15/images/delete.gif")
+
+
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// title - текст лейбла для инпута
+// options - ng-options expression
+mixin formControlSelect(prefix, model, field, title, options, nginit, change)
+	- var id  = prefix + "_" + field.toLowerCase()
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "')"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "')"
+	label= title
+	br
+	if nginit
+		if change
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro, ng-init= nginit, ng-change= change)
+				option(value="") Значение не выбрано
+		else
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro, ng-init= nginit)
+				option(value="") Значение не выбрано
+	else
+		if change
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro, ng-change= change)
+				option(value="") Значение не выбрано
+		else
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro)
+				option(value="") Значение не выбрано
+
+// миксин для поля выбора с возможностью добавления своего варианта
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// index - индекс, для полей в списках
+// options - ng-options expression
+mixin tableFormControlSelectWithCustomVariants(prefix, model, field, index, options, customModel, isCustomField, nginit, isCustomExpr)
+	- var id  = prefix + "_" + field.toLowerCase() + index
+	- var customId  = prefix + "_" + field.toLowerCase() + "_custom" + index 
+	- var isCustom = isCustomExpr
+	- var isNotCustom = "!"+ isCustomExpr
+	- var setIsCustomClick= isCustomField + "=true"
+	- var setIsNotCustomClick = isCustomField + "=false"
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "', indicator.IsCustomMeasure )"
+	- var customReq = isCustom + " && RiskCard.isFieldRequired('" + prefix + "','" + id + "_custom', indicator.IsCustomMeasure )"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "')"
+	
+	.input-group(ng-if= isNotCustom)
+		if nginit
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro, ng-init= nginit)
+				option(value="") Значение не выбрано
+		else
+			select.form-control(ng-model= model, ng-options= options, name= id, ng-required= req, ng-disabled= ro)
+				option(value="") Значение не выбрано
+		span.input-group-addon(ng-click= setIsCustomClick, ng-hide= ro) +  
+	.input-group(ng-if= isCustom)
+		input.form-control.measure(type= "text", ng-model= customModel, ng-required= customReq, ng-disabled= ro, name= customId)
+		span.input-group-addon(ng-click= setIsNotCustomClick, ng-hide= ro)
+			span.ms-cui-ctl-iconContainer(unselectable="on")
+				span.ms-cui-img-16by16.ms-cui-img-cont-float(unselectable="on")
+					img(unselectable="on", alt="" src="../img/formatmap16x16.png?rev=23", style="top: -271px; left: -271px;")
+
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// index - индекс, для полей в списках
+mixin tableFormControlTextarea(prefix, model, field, index)
+	- var id  = prefix + "_" + field.toLowerCase() + index
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','"+id+"')"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','"+id+"')"
+	textarea.form-control(ng-model= model, id= id, name= id, rows="2", ng-required= req, ng-disabled= ro)
+
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// title - текст лейбла для инпута
+mixin formControlTextarea(prefix, model, field, title, change)
+	- var id  = prefix + "_" + field.toLowerCase()
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "')"
+	- var ro  = "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "')"
+	label= title
+	br
+	if change
+		textarea.form-control(ng-model= model, id= id, name= id, rows="2", ng-change= change, ng-required= req, ng-disabled= ro)
+	else
+		textarea.form-control(ng-model= model, id= id, name= id, rows="2", ng-required= req, ng-disabled= ro)
+
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// index - индекс, для полей в списках
+mixin tableFormControlDTPicker(prefix, model, field, index, item, change)
+	- var id  = prefix + "_" + field.toLowerCase()
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "')"
+	- var ro  =   "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "'," + item + ")"
+	- var nro  = "!" + ro
+	- var roValue = "{{ " + model + "| date :'dd.MM.yyyy'}}"
+	- var opened =  item + "['" + field + "']"
+	- var click = "PlanGraph.open($event, " + item + ",'" + field + "')"
+	//- var opened = item + "." + openedField
+	div(ng-hide= ro)
+		input.form-control(type="text", name= id, is-open= opened, ng-click= click, datepicker-popup="dd.MM.yyyy", ng-model= model, ng-required= req, ng-change= change)
+	div(ng-hide= nro)
+		input.form-control(type="text", name= id, value= roValue, readonly)
+
+// prfix - префикс раздела
+// model - ng-model
+// filed - имя поля, чтобы определить обязательность, доступность
+// index - индекс, для полей в списках
+// item - 
+// change - 
+// options - 
+mixin tableFormControlStatus(prefix, model, field, index, item, change, options)
+	- var id  = prefix + "_" + field.toLowerCase()
+	- var req = "RiskCard.isFieldRequired('" + prefix + "','" + id + "')"
+	- var ro  =   "RiskCard.isFieldReadOnly('" + prefix + "','" + id + "'," + item + ")"
+	- var nro  = "!" + ro
+	- var roValue = "{{" + item + ".Status}}"
+	//- var opened = item + "." + openedField
+	div(ng-hide= ro)
+		select.form-control(ng-model= model, ng-options= options, ng-change= change, id= id, name= id, ng-required= req, ng-disabled= ro)
+	div(ng-hide= nro)
+		input.form-control(type="text", name= id, value= roValue, readonly)
+
+
+// миксин для кнопки добавления элемента таблицы-списка
+// prfix - префикс раздела
+// model - модель, передаваемая в функцию добавления нового элемента
+// listName - имя списка, передаём, чтобы определить видимость кнопки добавления
+mixin addItemBtn(prefix, model, listName)
+	- var click = "RiskCard.addNewItem(" + model + ", '" + listName + "')"
+	- var isShow = "RiskCard.isShowAddItemButton(" + model + ",'" + listName + "')"
+	span.ms-list-addnew-imgSpan20(ng-show= isShow, ng-click= click)
+		img.ms-list-addnew-img20(src="../img/spcommon.png?rev=23")
+
+// миксин для кнопки добавления элемента таблицы-списка
+// prfix - префикс раздела
+// model - модель, передаваемая в функцию добавления нового элемента
+// listName - имя списка, передаём, чтобы определить видимость кнопки добавления
+mixin addStepBtn(prefix, model, listName)
+	- var click = "PlanGraph.addStep("+model+")"
+	- var isShow = "RiskCard.isShowAddItemButton(" + model + ",'" + listName + "')"
+	span.ms-list-addnew-imgSpan20(ng-show= isShow, ng-click= click)
+		img.ms-list-addnew-img20(src="../img/spcommon.png?rev=23")
+
+// миксин для кнопки добавления элемента таблицы-списка
+// prfix - префикс раздела
+// model - модель, передаваемая в функцию добавления нового элемента
+// listName - имя списка, передаём, чтобы определить видимость кнопки добавления
+mixin addSubStepBtn(prefix, model, listName)
+	- var click = "PlanGraph.addSubStep(item.Childs, item)"
+	- var isShow = "RiskCard.isShowAddItemButton(" + model + ",'" + listName + "')"
+	span.ms-list-addnew-imgSpan20(ng-show= isShow, ng-click= click)
+		img.ms-list-addnew-img20(src="../img/spcommon.png?rev=23")
+
+// миксин для кнопки удаления элемента из таблицы-списка
+// prfix - префикс раздела
+// item - эелемент из списка
+// listName- имя списка
+mixin removeBtn(prefix, item, listName)
+	- var clickRemoveBtn = "RiskCard.removeItem(" + item + ")"
+	- var isShow = "RiskCard.isShowRemoveItemButton('" + listName + "'," + item + ")"
+	span.ms-cui-ctl-iconContainer(unselectable="on", ng-click= clickRemoveBtn, ng-show= isShow)
+		span.ms-cui-img-16by16.ms-cui-img-cont-float(unselectable="on")
+			img(unselectable="on", alt="", src="../img/formatmap16x16.png?rev=23", style="top: -271px; left: -271px;")
+
+mixin removeStepBtn(prefix, item, listName)
+	- var clickRemoveBtn = "PlanGraph.removeStep(" + item + ")"
+	- var isShow = "RiskCard.isShowRemoveItemButton('" + listName + "'," + item + ")"
+	span.ms-cui-ctl-iconContainer(unselectable="on", ng-click= clickRemoveBtn, ng-show= isShow)
+		span.ms-cui-img-16by16.ms-cui-img-cont-float(unselectable="on")
+			img(unselectable="on", alt="", src="../img/formatmap16x16.png?rev=23", style="top: -271px; left: -271px;")
+
+mixin removeSubStepBtn(prefix, item, listName, parent)
+	- var clickRemoveBtn = "PlanGraph.removeSubStep(" + item + "," + parent + ")"
+	- var isShow = "RiskCard.isShowRemoveItemButton('" + listName + "'," + item + ")"
+	span.ms-cui-ctl-iconContainer(unselectable="on", ng-click= clickRemoveBtn, ng-show= isShow)
+		span.ms-cui-img-16by16.ms-cui-img-cont-float(unselectable="on")
+			img(unselectable="on", alt="", src="../img/formatmap16x16.png?rev=23", style="top: -271px; left: -271px;")
+
+// миксин для простых таблиц из 3-х столбцов - номер, название, удалить
+// prfix - префикс раздела
+// title - лейбл для таблицы
+// model - модель списка
+// field - имя поля выводимого во втором столбце
+// item -имя эелемента в итераторе
+// listName - имя списка
+mixin formControlSimpleTable(prefix, model, field, fieldLabel, item, listName, title)
+	- var id  = prefix + "_" + field.toLowerCase()
+	- var prefix1 = prefix + "_" + listName.toLowerCase()
+	- var repeat = item + " in " + model + " | filter:{IsDeleted:!true}"
+	- var Error = "{{RiskCard.getListErrorMessage(" + model + ", '" + listName + "')}}"
+	- var isShowError = "RiskCard.getListErrorMessage(" + model +", '" + listName + "')"
+	- var fieldModel = item + "." + field
+	br
+	label= title
+	|  &nbsp; 
+	+addItemBtn(prefix, model, listName)
+	br
+	table.table.table-condensed
+		thead
+			tr
+				th(width="25px") №
+				th(width="100%")= fieldLabel
+				th
+		tbody
+			tr(ng-repeat= repeat)
+				td {{$index+1}}
+				td
+					+tableFormControlTextarea(prefix1, fieldModel, field, "{{$index}}")
+				td
+					+removeBtn(prefix, item, listName)
+	span.error(ng-show= isShowError)= Error
+
+mixin step(isSubStep)
+	td
+		if isSubStep
+			| {{PlanGraph.getIndex(item.Childs, child, item)}}
+		else
+			| {{PlanGraph.getIndex(RiskCard.model.Steps, item)}}	
+		// 2 № этапа/подэтапа. Тип поля - Однострочный текст. Поле обязательное для заполнения.
+		br
+		if isSubStep
+			a(ng-href="{{child.WorkspaceUrl}}", target="_blank", title="Рабочая область", ng-show="child.WorkspaceUrl")
+				img(src="../img/folder.gif?rev=23")
+		else
+			a(ng-href="{{item.WorkspaceUrl}}", target="_blank", title="Рабочая область", ng-show="item.WorkspaceUrl")
+				img(src="../img/folder.gif?rev=23")
+		// 1 Вложения. Столбец для вложения документов, протоколов и т.д.
+	td
+		if isSubStep
+			+tableFormControlText(prefix, "child.Title", "StepTitle", "{{$index}}", null, "child")
+		else
+			+tableFormControlText(prefix, "item.Title",  "StepTitle", "{{$index}}", null, "item")
+		// 3 Название этапа/подэтапа. Тип поля - Однострочный текст. 
+		// Поле обязательное для заполнения. Поле защищено от корректировок.
+		td
+			if isSubStep
+				+tableFormControlSelect(prefix, "child.ActionType", "StepActionType", "{{$index}}", "stepaction for stepaction in RiskCard.lists.StepActionTypes", "child")
+			else
+				+tableFormControlSelect(prefix, "item.ActionType", "StepActionType", "{{$index}}", "stepaction for stepaction in RiskCard.lists.StepActionTypes", "item")
+			// 4 Характер мероприятия. Тип поля – Выбор (меню). Поле обязательное для заполнения. 
+			// Способ предоставления вариантов - раскрывающееся меню. 
+			// Варианты выбора: профилактика, реагирование.
+
+	td
+		if (isSubStep)
+			//+tableFormControlSelect(prefix, "child.ResponsibleUserInfoId", "StepResponsibleUserInfoId", "", "responsible.Id as responsible.Title for responsible in RiskCard.lists.Users", "child")
+			//+reponsiblesControl(prefix, "child.ResponsibleUserInfoId", "StepResponsibleUserInfoId", "", "responsible.Id as responsible.Title for responsible in RiskCard.lists.Users", "child", "true")
+			+reponsiblesControl(prefix, "child.Responsibles", "StepResponsibles", $$index, "RiskCard.lists.Users", "child","true")
+		else
+			//+tableFormControlSelect(prefix, "item.ResponsibleUserInfoId", "StepResponsibleUserInfoId", "", "responsible.Id as responsible.Title for responsible in RiskCard.lists.Users", "item")
+			//+reponsiblesControl(prefix, "item.ResponsibleUserInfoId", "StepResponsibleUserInfoId", "", "responsible.Id as responsible.Title for responsible in RiskCard.lists.Users", "item","true")
+			+reponsiblesControl(prefix, "item.Responsibles", "StepResponsibles", $$index, "RiskCard.lists.Users", "item","true")
+		// 5 Ответственный. Тип поля - Пользователь или группа, разрешить выбор нескольких элементов, разрешить выбор - только пользователи, выбрать из - все пользователи.
+		// Поле обязательное для заполнения.
+	td
+		if (isSubStep)
+			+tableFormControlDTPicker(prefix, "child.StartPlan", "SubStepStartPlan", "{{$index}}", "child", "PlanGraph.refreshSubStepFields(child, item)")
+		else
+			+tableFormControlDTPicker(prefix, "item.StartPlan", "StepStartPlan", "{{$index}}", "item", "PlanGraph.refreshStepFields(item)")
+		//input.form-control(type="text", value="{{item.StartPlan| date :'dd.MM.yyyy'}}", readonly)
+		// 6 Дата начала_План. Тип поля – дата и время. Формат даты и времени – только дата.
+		// Поле обязательное для заполнения. Поле защищено от корректировок.
+		// Если в ключевом этапе есть подэтапы, то дата начала этапа_план автоматически рассчитывается от дат начала_план всех подэтапов (выбирается минимальное значение)
+		br
+		if (isSubStep)
+			+tableFormControlDTPicker(prefix, "child.StartFact", "SubStepStartFact", "{{$index}}", "child", "PlanGraph.refreshSubStepFields(child, item)")
+			span.error(ng-show="child.startFactInvalidMessage") {{child.startFactInvalidMessage}}
+		else
+			+tableFormControlDTPicker(prefix, "item.StartFact", "StepStartFact", "{{$index}}", "item", "PlanGraph.refreshStepFields(item)")
+			span.error(ng-show="item.startFactInvalidMessage") {{item.startFactInvalidMessage}}
+		//input.form-control(type="text", value="{{item.StartFact| date :'dd.MM.yyyy'}}", readonly)
+		// 8 Дата начала_Факт. Тип поля – дата и время. Формат даты и времени – только дата.
+		// Если в ключевом этапе есть подэтапы, то дата начала_факт этапа автоматически рассчитывается от дат начала_факт всех подэтапов (выбирается минимальное значение).
+		// Проверка данных: если статус этапа/подэтапа равен «в процессе выполнения», то отображается служебное сообщение «Необходимо указать фактическую дату начала этапа/подэтапа».
+	td
+		if (isSubStep)
+			+tableFormControlDTPicker(prefix, "child.FinishPlan", "SubStepFinishPlan", "{{$index}}", "child", "PlanGraph.refreshSubStepFields(child, item)")
+		else
+			+tableFormControlDTPicker(prefix, "item.FinishPlan", "StepFinishPlan", "{{$index}}", "item", "PlanGraph.refreshStepFields(item)")
+		//input.form-control(type="text", value="{{item.FinishPlan| date :'dd.MM.yyyy'}}",  readonly)
+		// 7 Дата окончания_План. Тип поля – дата и время. Формат даты и времени – только дата.
+		// Поле обязательное для заполнения. Поле защищено от корректировок.
+		// Если в ключевом этапе есть подэтапы, то дата окончания этапа_план автоматически рассчитывается от дат окончания_план всех подэтапов (выбирается максимальное значение)
+		br
+		if (isSubStep)
+			+tableFormControlDTPicker(prefix, "child.FinishFact", "SubStepFinishFact", "{{$index}}", "child", "PlanGraph.refreshSubStepFields(child, item)")
+			span.error(ng-show="child.finishFactInvalidMessage") {{child.finishFactInvalidMessage}}
+		else
+			+tableFormControlDTPicker(prefix, "item.FinishFact", "StepFinishFact", "{{$index}}", "item", "PlanGraph.refreshStepFields(item)")
+			span.error(ng-show="item.finishFactInvalidMessage") {{item.finishFactInvalidMessage}}
+		//input.form-control(type="text", value="{{item.FinishFact| date :'dd.MM.yyyy'}}", readonly)
+		// 9 Дата окончания_Факт. Тип поля – дата и время. Формат даты и времени – только дата.
+		// Если в ключевом этапе есть подэтапы, то дата окончания_факт этапа автоматически рассчитывается от дат окончания_факт всех подэтапов (выбирается максимальное значение).
+		// Проверка данных: если статус этапа/подэтапа равен «выполнен», то отображается служебное сообщение «Необходимо указать фактическую дату окончания этапа/подэтапа».
+	td
+		if (isSubStep)
+			input.form-control(type="text", name="substep-durationplan", value="{{child.DurationPlan|number:0}}",  readonly)
+		else
+			input.form-control(type="text", name="substep-durationplan", value="{{item.DurationPlan|number:0}}",  readonly)
+		// 10 Длительность_План. Тип поля - Вычисляемый (вычисление по другим столбцам).
+		//Формула расчета: Дней360(Дата начала_План; Дата окончания_План)+1
+		br
+		if (isSubStep)
+			input.form-control(type="text", name="substep-durationfact", value="{{child.DurationFact|number:0}}", readonly)
+		else
+			input.form-control(type="text", name="substep-durationfact", value="{{item.DurationFact|number:0}}", readonly)
+		// 11 Длительность_Факт. Тип поля - Вычисляемый (вычисление по другим столбцам).
+		// Формула расчета - если статус этапа/подэтапа равен «выполнен», то Длительность_Факт = Дней360(Дата начала_Факт; Дата окончания_Факт)+1, иначе 0.
+	td
+		if isSubStep
+			+tableFormControlStatus(prefix, "child.Status", "StepStatus", "{{$index}}", "child", "PlanGraph.refreshSubStepFields(child, item)", "stepstatus for stepstatus in RiskCard.lists.StepStatuses")
+			span.error(ng-show="child.statusInvalidMessage") {{child.statusInvalidMessage}}
+		else
+			+tableFormControlStatus(prefix, "item.Status", "StepStatus", "{{$index}}", "item", "PlanGraph.refreshStepFields(item)", "stepstatus for stepstatus in RiskCard.lists.StepStatuses")
+			span.error(ng-show="item.statusInvalidMessage") {{item.statusInvalidMessage}}
+		// 13	Статус этапа/подэтапа	Тип поля – Выбор. Варианты выбора - не начат, в процессе выполнения, выполнен, не выполнен, не актуален, отложен. Поле обязательное для заполнения. Способ предоставления вариантов - раскрывающееся меню.
+		// В случае если в этапе есть подэтапы, то статус этапа автоматически заполняется следующим образом:
+		// Статус «в процессе выполнения»:
+		//  - если хотя бы по 1 подэтапу проставлено значение «в процессе выполнения», то статус этапа «в процессе выполнения»;
+		//  - если статус подэтапа содержит и «не начат» и или «выполнен», «не выполнен», «не актуален», то статус этапа – «в процессе выполнения»;
+		// Статус «выполнен»:
+		//  - если по всем подэтапам проставлено значение «выполнен», то статус этапа «выполнен»;
+		// - если статус подэтапа содержит и «выполнен» и или «не выполнен», «не актуален», то статус этапа «выполнен»;
+		// Статус «не выполнен»:
+		// - если по всем подэтапам проставлено значение «не выполнен», то статус этапа «не выполнен»;
+		// Статус «не актуален»:
+		// - если по всем подэтапам проставлено значение «не актуален», то статус этапа «не актуален»;
+		// Статус «отложен»:
+		// - если хотя бы по 1 подэтапу проставлено значение «отложен», то статус этапа «отложен»;
+		// Проверка внесенных данных:
+		// TODO - если в поле «Дата начала_Факт» и «Дата окончания_Факт» не пусто и статус этапа/подэтапа равен «не начат», «в процессе выполнения», то отображается служебное сообщение «Необходимо скорректировать статус этапа/подэтапа на «выполнен»;
+		// TODO - если в поле «Дата начала_Факт» не пусто и в поле «Дата окончания_Факт» пусто и статус этапа/подэтапа равен «не начат», то отображается служебное сообщение «Необходимо скорректировать статус этапа/подэтапа на «в процессе выполнения».
+	td
+		if isSubStep
+			+tableFormControlText(prefix, "child.ReasonLate", "StepReasonLate", "{{$index}}", "PlanGraph.refreshSubStepFields(child, item)","child")
+			// prefix, model, field, index, change, item
+			span.error(ng-show="child.reasonLateInvalidMessage") {{child.reasonLateInvalidMessage}}
+		else
+			+tableFormControlText(prefix, "item.ReasonLate", "StepReasonLate", "{{$index}}", "PlanGraph.refreshStepFields(item)", "item")
+			span.error(ng-show="item.reasonLateInvalidMessage") {{item.reasonLateInvalidMessage}}
+		// 19 Причина отклонения/невыполнения. Тип поля - Однострочный текст.
+		// Проверка внесенных данных: 
+		// TODO - если статус этапа/подэтапа равен «не начат», «в процессе выполнения», «выполнен» и или отклонения от плана графика (от даты начала, окончания) > 0 или текущее отклонение (от даты начала, окончания) > 0, и в данном поле пусто, то отображается служебное сообщение «Необходимо указать причину отклонения от плана-графика».
+		// TODO - если статус этапа/подэтапа равен «не выполнен», «не актуален», «отложен», и в данном поле пусто, то отображается служебное сообщение «Необходимо указать причину не выполнения/неактуальности/переноса реализации этапа/подэтапа».
+		//br
+		//span.error(ng-show="isReasonWarning1()") Необходимо указать причину отклонения от плана-графика
+		//span.error(ng-show="isReasonWarning2()") Необходимо указать причину не выполнения/неактуальности/переноса реализации этапа/подэтапа
+	td
+		//if (isSubStep)
+		//	textarea.form-control(ng-model="child.ImplementedActivies", ng-readonly="isReadOnly()")
+		//else
+		//	textarea.form-control(ng-model="item.ImplementedActivies", ng-readonly="isReadOnly()")
+		if isSubStep
+			+tableFormControlText(prefix, "child.Comment", "StepComment", "{{$index}}", null, "child")
+		else
+			+tableFormControlText(prefix, "item.Comment", "StepComment", "{{$index}}", null, "item")
+		// 20 Комментарии и пояснения. Тип поля - Однострочный текст.
+		//br
+		//span.error(ng-show="isImplementedActiviesWarning()") Необходимо указать выполненные мероприятия в рамках реализации этапа
+	td
+		if isSubStep
+			input.form-control(type="text", name="substep-CurrentStartDivergenceDay", value="{{child.CurrentStartDivergenceDay|number:0}}", readonly)
+		else
+			input.form-control(type="text", name="substep-CurrentStartDivergenceDay", value="{{item.CurrentStartDivergenceDay|number:0}}", readonly)
+		//// 19 Текущее отклонение от даты начала, дней. Тип поля - Вычисляемый (вычисление по другим столбцам).
+		//// Отклонения от плана-графика этапа/подэтапа рассчитывается следующим образом: 
+		//// - если статус этапа/подэтапа равен «не начат» и текущая дата > Дата начала_План, то текущее отклонение = (Дней360(Дата начала_План;Текущая дата)+1)
+		//// br
+		//// input.form-control(type="text", value="{{item.PercentCompleteAdditional|number:0}}", readonly)
+		br
+		if isSubStep
+			input.form-control(type="text", name="substep-CurrentFinishtDivergenceDay", value="{{child.CurrentFinishtDivergenceDay|number:0}}", readonly)
+		else
+			input.form-control(type="text", name="substep-CurrentFinishtDivergenceDay", value="{{item.CurrentFinishDivergenceDay|number:0}}", readonly)
+		//input.form-control(type="text", value="{{item.Efficiency|number:0}}",  readonly)
+		//// 20 Текущее отклонение от даты окончания, дней. Тип поля - Вычисляемый (вычисление по другим столбцам).
+		//// Отклонения от плана-графика этапа/подэтапа рассчитывается следующим образом: - 
+		//// если статус этапа/подэтапа равен «в процессе выполнения» и текущая дата > Дата окончания_План, то текущее отклонение = (Дней360(Дата окончания_План; Текущая дата)+1)
+	td
+		if isSubStep
+			input.form-control(type="text", name="substep-StartDivergenceDay", value="{{child.StartDivergenceDay|number:0}}", readonly)
+		else
+			input.form-control(type="text", name="substep-StartDivergenceDay", value="{{item.StartDivergenceDay|number:0}}", readonly)
+		// 21 Отклонение от даты начала, дней. Тип поля - Вычисляемый (вычисление по другим столбцам).
+		// Статус «выполнен»:
+		//  если статус этапа/подэтапа равен «выполнен» и Дата начала_Факт > Дата начала_План, то отклонение = (Дней360(Дата начала_План; Дата начала_Факт)+1);
+		// Статус «не выполнен»/«не актуален»/«отложен» - 
+		//  если Дата начала_Факт > Дата начала_План, то отклонение = (Дней360(Дата начала_План;Дата начала_Факт)+1), 
+		//  иначе 0.
+		br
+		if isSubStep
+			input.form-control(type="text", name="substep-FinishDivergenceDay", value="{{child.FinishDivergenceDay|number:0}}", readonly)
+		else
+			input.form-control(type="text", name="substep-FinishDivergenceDay", value="{{item.FinishDivergenceDay|number:0}}", readonly)
+		//input.form-control(type="text", value="{{item.DivergenceShedulerDay|number:0}}", readonly)
+		// 22 Отклонение от даты окончания, дней. Тип поля - Вычисляемый (вычисление по другим столбцам) - 
+		// если статус этапа/подэтапа равен «выполнен» и Дата окончания_Факт > Дата окончания_План, то отклонение = (Дней360(Дата окончания_План; Дата окончания_Факт)+1), 
+		// иначе *0.
+	td(ng-hide="isReadonly()")
+		if isSubStep
+			+removeSubStepBtn(prefix, "child",	"SubSteps", "item")
+		else	
+			+addSubStepBtn(prefix, "item.Childs", "SubSteps")
+			br
+			br
+			+removeSubStepBtn(prefix, "item", "Steps")
+		//add-item-btn(ng-show="!parentItem&&!isReadOnly()", parent="item", items="items")
+
+mixin subSteps()
+	tr(ng-repeat="child in item.Childs | filter:{IsDeleted:!true}")
+		td
+			//| {{item}}
+			//br
+			| {{PlanGraph.getIndex(item.Childs, child, item)}}
+			// 2 № этапа/подэтапа. Тип поля - Однострочный текст. Поле обязательное для заполнения.
+			br
+			a(ng-href="{{child.WorkspaceUrl", target="_blank", title="Рабочая область", ng-show="child.WorkspaceUrl")
+				img(src="../img/folder.gif?rev=23")
+			// 1 Вложения. Столбец для вложения документов, протоколов и т.д.
+		td
+			+tableFormControlText(prefix, "child.Title", "SubStepTitle", "{{$index}}")
+			// 3 Название этапа/подэтапа. Тип поля - Однострочный текст. 
+			// Поле обязательное для заполнения. Поле защищено от корректировок.
+		td
+			+tableFormControlSelect(prefix, "child.ActionType", "StepActionType", "{{$index}}", "substepaction.Id as substepaction.Title for substepaction in RiskCard.lists.StepActionTypes")
+			// 4 Характер мероприятия. Тип поля – Выбор (меню). Поле обязательное для заполнения. 
+			// Способ предоставления вариантов - раскрывающееся меню. 
+			// Варианты выбора: профилактика, реагирование.
+		td
+			+reponsiblesControl(prefix, "child.ResponsibleUserInfoId", "StepResponsibleUserInfoId", "", "responsible.Id as responsible.Title for responsible in RiskCard.lists.Users", "child", "true")
+			//+tableFormControlSelect(prefix, "child.ResponsibleUserInfoId", "SubStepResponsibleUserInfoId", "", "substepresponsible.Id as substepresponsible.Title for substepresponsible in RiskCard.lists.Users")
+			// 5 Ответственный. Тип поля - Пользователь или группа, разрешить выбор нескольких элементов, разрешить выбор - только пользователи, выбрать из - все пользователи.
+			// Поле обязательное для заполнения.
+		td
+			input.form-control(type="text", name="substep-StartPlan", value="{{child.StartPlan| date :'dd.MM.yyyy'}}", readonly)
+			// 6 Дата начала_План. Тип поля – дата и время. Формат даты и времени – только дата.
+			// Поле обязательное для заполнения. Поле защищено от корректировок.
+			// Если в ключевом этапе есть подэтапы, то дата начала этапа_план автоматически рассчитывается от дат начала_план всех подэтапов (выбирается минимальное значение)
+			br
+			input.form-control(type="text", name="substep-StartFact", value="{{child.StartFact| date :'dd.MM.yyyy'}}", readonly)
+			// 8 Дата начала_Факт. Тип поля – дата и время. Формат даты и времени – только дата.
+			// Если в ключевом этапе есть подэтапы, то дата начала_факт этапа автоматически рассчитывается от дат начала_факт всех подэтапов (выбирается минимальное значение).
+			// Проверка данных: если статус этапа/подэтапа равен «в процессе выполнения», то отображается служебное сообщение «Необходимо указать фактическую дату начала этапа/подэтапа».
+			br
+		td
+			input.form-control(type="text", name="substep-FinishPlan", value="{{child.FinishPlan| date :'dd.MM.yyyy'}}",  readonly)
+			// 7 Дата окончания_План. Тип поля – дата и время. Формат даты и времени – только дата.
+			// Поле обязательное для заполнения. Поле защищено от корректировок.
+			// Если в ключевом этапе есть подэтапы, то дата окончания этапа_план автоматически рассчитывается от дат окончания_план всех подэтапов (выбирается максимальное значение)
+			br
+			input.form-control(type="text", name="substep-FinishFact", value="{{child.FinishFact| date :'dd.MM.yyyy'}}", readonly)
+			// 9 Дата окончания_Факт. Тип поля – дата и время. Формат даты и времени – только дата.
+			// Если в ключевом этапе есть подэтапы, то дата окончания_факт этапа автоматически рассчитывается от дат окончания_факт всех подэтапов (выбирается максимальное значение).
+			// Проверка данных: если статус этапа/подэтапа равен «выполнен», то отображается служебное сообщение «Необходимо указать фактическую дату окончания этапа/подэтапа».
+			br
+		td
+			input.form-control(type="text", name="substep-DurationPlan", value="{{child.DurationPlan|number:0}}",  readonly)
+			// 10 Длительность_План. Тип поля - Вычисляемый (вычисление по другим столбцам).
+			//Формула расчета: Дней360(Дата начала_План; Дата окончания_План)+1
+			br
+			input.form-control(type="text", name="substep-DurationFact", value="{{child.DurationFact|number:0}}", readonly)
+			// 11 Длительность_Факт. Тип поля - Вычисляемый (вычисление по другим столбцам).
+			// Формула расчета - если статус этапа/подэтапа равен «выполнен», то Длительность_Факт = Дней360(Дата начала_Факт; Дата окончания_Факт)+1, иначе 0.
+			br
+		//td
+		//	input.form-control(type="text", value="{{item.Weight|number:0}}", readonly)
+		td
+			input.form-control(type="text", name="substep-Status", readonly, ng-model="child.Status")
+			// 13	Статус этапа/подэтапа	Тип поля – Выбор. Варианты выбора - не начат, в процессе выполнения, выполнен, не выполнен, не актуален, отложен. Поле обязательное для заполнения. Способ предоставления вариантов - раскрывающееся меню.
+			// В случае если в этапе есть подэтапы, то статус этапа автоматически заполняется следующим образом:
+			// Статус «в процессе выполнения»:
+			//  - если хотя бы по 1 подэтапу проставлено значение «в процессе выполнения», то статус этапа «в процессе выполнения»;
+			//  - если статус подэтапа содержит и «не начат» и или «выполнен», «не выполнен», «не актуален», то статус этапа – «в процессе выполнения»;
+			// Статус «выполнен»:
+			//  - если по всем подэтапам проставлено значение «выполнен», то статус этапа «выполнен»;
+			// - если статус подэтапа содержит и «выполнен» и или «не выполнен», «не актуален», то статус этапа «выполнен»;
+			// Статус «не выполнен»:
+			// - если по всем подэтапам проставлено значение «не выполнен», то статус этапа «не выполнен»;
+			// Статус «не актуален»:
+			// - если по всем подэтапам проставлено значение «не актуален», то статус этапа «не актуален»;
+			// Статус «отложен»:
+			// - если хотя бы по 1 подэтапу проставлено значение «отложен», то статус этапа «отложен»;
+			// Проверка внесенных данных:
+			// - если в поле «Дата начала_Факт» и «Дата окончания_Факт» не пусто и статус этапа/подэтапа равен «не начат», «в процессе выполнения», то отображается служебное сообщение «Необходимо скорректировать статус этапа/подэтапа на «выполнен»;
+			// - если в поле «Дата начала_Факт» не пусто и в поле «Дата окончания_Факт» пусто и статус этапа/подэтапа равен «не начат», то отображается служебное сообщение «Необходимо скорректировать статус этапа/подэтапа на «в процессе выполнения».
+		td
+			textarea.form-control(ng-model="child.ReasonLate", name="substep-ReasonLate", ng-readonly="isReadOnly()")
+			// 19 Причина отклонения/невыполнения. Тип поля - Однострочный текст.
+			// Проверка внесенных данных: 
+			// - если статус этапа/подэтапа равен «не начат», «в процессе выполнения», «выполнен» и или отклонения от плана графика (от даты начала, окончания) > 0 или текущее отклонение (от даты начала, окончания) > 0, и в данном поле пусто, то отображается служебное сообщение «Необходимо указать причину отклонения от плана-графика».
+			// - если статус этапа/подэтапа равен «не выполнен», «не актуален», «отложен», и в данном поле пусто, то отображается служебное сообщение «Необходимо указать причину не выполнения/неактуальности/переноса реализации этапа/подэтапа».
+			br
+			span.error(ng-show="isReasonWarning1()") Необходимо указать причину отклонения от плана-графика
+			span.error(ng-show="isReasonWarning2()") Необходимо указать причину не выполнения/неактуальности/переноса реализации этапа/подэтапа
+		td
+			textarea.form-control(ng-model="child.ImplementedActivies", name="substep-ImplementedActivies", ng-readonly="isReadOnly()")
+			// 20 Комментарии и пояснения. Тип поля - Однострочный текст.
+			br
+			span.error(ng-show="isImplementedActiviesWarning()") Необходимо указать выполненные мероприятия в рамках реализации этапа
+		td
+			input.form-control(type="text", name="substep-PercentComplete", value="{{child.PercentComplete|number:0}}", readonly)
+			// 19 Текущее отклонение от даты начала, дней. Тип поля - Вычисляемый (вычисление по другим столбцам).
+			// Отклонения от плана-графика этапа/подэтапа рассчитывается следующим образом: 
+			// - если статус этапа/подэтапа равен «не начат» и текущая дата > Дата начала_План, то текущее отклонение = (Дней360(Дата начала_План;Текущая дата)+1)
+			// br
+			// input.form-control(type="text", value="{{item.PercentCompleteAdditional|number:0}}", readonly)
+			br
+			input.form-control(type="text", name="substep-Efficiency", value="{{child.Efficiency|number:0}}",  readonly)
+			// 20 Текущее отклонение от даты окончания, дней. Тип поля - Вычисляемый (вычисление по другим столбцам).
+			// Отклонения от плана-графика этапа/подэтапа рассчитывается следующим образом: - 
+			// если статус этапа/подэтапа равен «в процессе выполнения» и текущая дата > Дата окончания_План, то текущее отклонение = (Дней360(Дата окончания_План; Текущая дата)+1)
+		td
+			input.form-control(type="text", name="substep-DivergenceShedulerDayNow", value="{{child.DivergenceShedulerDayNow|number:0}}", readonly)
+			// 21 Отклонение от даты начала, дней. Тип поля - Вычисляемый (вычисление по другим столбцам).
+			// Статус «выполнен»:
+			//  если статус этапа/подэтапа равен «выполнен» и Дата начала_Факт > Дата начала_План, то отклонение = (Дней360(Дата начала_План; Дата начала_Факт)+1);
+			// Статус «не выполнен»/«не актуален»/«отложен» - 
+			//  если Дата начала_Факт > Дата начала_План, то отклонение = (Дней360(Дата начала_План;Дата начала_Факт)+1), 
+			//  иначе 0.
+			br
+			input.form-control(type="text", name="substep-DivergenceShedulerDay", value="{{child.DivergenceShedulerDay|number:0}}", readonly)
+			// 22 Отклонение от даты окончания, дней. Тип поля - Вычисляемый (вычисление по другим столбцам) - 
+			// если статус этапа/подэтапа равен «выполнен» и Дата окончания_Факт > Дата окончания_План, то отклонение = (Дней360(Дата окончания_План; Дата окончания_Факт)+1), 
+			// иначе *0.
+		td(ng-hide="isReadonly()")
+			remove-item-btn(item="child", ng-show="!isReadOnly()")

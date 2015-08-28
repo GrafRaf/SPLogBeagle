@@ -1,0 +1,55 @@
+﻿- var prefix = "reporttab_results"
+include mixins.jade
+
+accordion-group(heading="Общие выводы о результатах управления риском")
+
+	//5. Раздел 5 - «Общие выводы о результатах управления риском», который в свою очередь включает следующие подразделы:
+	
+	// Рекомендации по управлению риском - тип поля - многострочный текст. 
+		Проверка данных: 
+			если текущая дата >= 31 Декабря и текущий год не равен значению в поле «Отчетный год» 
+				или в поле «Риск реализован» проставлена галочка 
+			и в данном поле пусто, 
+					то отображается служебное сообщение:
+						«Необходимо указать основные выводы  и рекомендации по управлению риском, степень и достаточность снижения риска по результатам управления в течение отчетного периода»
+	+formControlTextarea(prefix, "RiskCard.model.RiskManagementRecommendations", "RiskManagementRecommendations", "Рекомендации по управлению риском")
+	span.error(ng-show="RiskCard.riskManagementRecommendationsInvalidMessage()") {{RiskCard.riskManagementRecommendationsInvalidMessage()}}
+	
+	// В конце вкладки «Отчет об управлении риском» находится 2 кнопки, 
+	// при нажатии на которую происходит автоматическое создание документа Excel «Отчет об управлении риском»
+	// с автоматически заполненными данными или новой карточки риска с автоматически заполненными данными. 
+	// Шаблон документа должен храниться в библиотеке документов «Шаблоны форм». 
+	// В шаблоне документа «[]» скобками обозначены поля, необходимые для автоматического заполнения информации (см. приложение 1). 
+	// Данные в шаблоне документа «Отчет об управлении риском» подтягиваются из вкладки «Паспорт риска», вкладки «План-график», «Отчет об управлении риском».
+	
+
+//	
+	После сохранения внесенных изменений во вкладке «Отчет об управлении риском» автоматически запускается рабочий процесс согласования внесенных данных. Согласование внесенных данных состоит из 2 этапов (Subject: Согласование карточки риска №[ID риска] «[Наименование риска]» (Блок портала «Управление рисками»)):
+	 – 1 этап - согласование сотрудниками отдела стратегического и проектного управления (Группа пользователей - ОСиПУ). Сотрудникам ОСиПУ на e-mail поступает уведомление:
+	Добрый день!
+	Информируем Вас о том, что внесены данные об управлении риском во вкладку «Отчет об управлении риском» по риску № [ID риска] «[Наименование риска]».
+	Для согласования внесенных данных необходимо перейти по ссылки.
+	С уважением,
+	Администрация Портала СПУР
+	– 2 этап - согласование владельцем риска (поле «e-mail_владельца» вкладки «Паспорт риска»). Владельцу риска на e-mail поступает уведомление:
+	Добрый день!
+	Информируем Вас о том, что внесены данные об управлении риском во вкладку «Отчет об управлении риском» по риску № [ID риска] «[Наименование риска]».
+	Для согласования внесенных данных необходимо перейти по ссылки.
+	С уважением,
+	Администрация Портала СПУР
+
+	+formControlSelect(prefix, "RiskCard.model.ReportYear", "ReportYear", "Отчётный год", "year for year in RiskCard.lists.ReportYears")
+	+formControlTextarea(prefix, "RiskCard.model.Name", "Name", "Наименование риска")
+	+formControlTextarea(prefix, "RiskCard.model.Description", "Description", "Описание риска")
+	+formControlSelect(prefix, "RiskCard.model.SocietyId", "SocietyId", "Общество", "society.Id as society.Title for society in RiskCard.lists.Society")
+	+formControlSelect(prefix, "RiskCard.model.ManagementId", "ManagementId", "Дирекция", "management.Id as management.Title for management in RiskCard.lists.Managements | filter: { SocietyId: RiskCard.model.SocietyId}")
+	+formControlSelect(prefix, "RiskCard.model.RiskKindId", "RiskKind", "Вид риска по источнику возникновения", "rk.Id as rk.Title for rk in RiskCard.lists.RiskKinds")
+	+formControlSelect(prefix, "RiskCard.model.RiskGroupId", "RiskGroup", "Группа риска", "rg.Id as rg.Title for rg in RiskCard.lists.RiskGroups | filter: { RiskKindId: RiskCard.model.RiskKindId}")
+	+formControlSelect(prefix, "RiskCard.model.AreaBusinessProcessId", "AreaBusinessProcess", "Область/Бизнес-процесс", "rg.Id as rg.Title for rg in RiskCard.lists.AreaBusinessProcesses | filter: { RiskGroupId: RiskCard.model.RiskGroupId}")
+	+formControlSelect(prefix, "RiskCard.model.ThreatOpportunityId", "ThreatOpportunity", "Угроза/возможность", "to.Id as to.Title for to in RiskCard.lists.ThreatOpportunities")
+	+formControlSelect(prefix, "RiskCard.model.RiskResponseStrategyId", "RiskResponseStrategy", "Стратегия реагирования на риск", "rrs.Id as rrs.Title for rrs in RiskCard.lists.RiskResponseStrategies")
+	+formControlSelect(prefix, "RiskCard.model.UnacceptableRiskId", "UnacceptableRisk", "Неприемлемые риски", "ur.Id as ur.Title for ur in RiskCard.lists.UnacceptableRisks")
+	+formControlSimpleTable(prefix, "RiskCard.model.RiskFactors", "Title", "Причины риска",  "rf", "RiskFactors", "Причины риска")
+	+formControlSimpleTable(prefix, "RiskCard.model.ConsequencesOfRisk", "Title", "Последствия риска", "cor", "ConsequencesOfRisk", "Последствия риска")
+
+

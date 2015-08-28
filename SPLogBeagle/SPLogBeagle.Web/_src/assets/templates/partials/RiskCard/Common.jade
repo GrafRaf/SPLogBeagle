@@ -1,0 +1,73 @@
+﻿- var prefix = "common"
+include mixins.jade
+.projectPassport(ng-form name="ProjectForm")
+	// | Show developer panel:
+		input(type="checkbox", ng-model="RiskCard.isShowDevPanel")
+		br
+	div(ng-show="RiskCard.isShowDevPanel()")
+		| Форма:
+		select(ng-model="RiskCard.FormType", ng-options="ft for ft in RiskCard.FormTypes")
+		br
+		input(type="checkbox", ng-model="RiskCard.model.IsAdminOwner")
+		| Администратор/Владелец риска
+		br
+		input(type="checkbox", ng-model="RiskCard.model.IsCreatedLessThan7DayAgo")
+		| Прошло меньше 7 дней со дня создания
+		br
+		input(type="checkbox", ng-model="RiskCard.model.IsOSIPU_User")
+		| Сотрудники отдела стратегического и проектного управления
+		br
+		input(type="checkbox", ng-model="RiskCard.model.dateCondition")
+		| "Если текущая дата >=31 Декабря и текущий год не равен значению в поле «Отчетный год»"
+		br
+		| Пользователь:
+		select(ng-model="RiskCard.model.CurrentUserInfoId", ng-options="responsible.Id as responsible.Title for responsible in RiskCard.lists.Users")
+	table
+		tr
+			td
+				strong ID риска
+			td(style="min-width:200px;")
+				| {{RiskCard.model.RiskID}}
+			td
+				| Разрешить изменения
+				input(type="checkbox", ng-model="RiskCard.model.IsEditAllow", ng-disabled="!RiskCard.model.IsOSIPU_User")
+		tr
+			td
+				strong Наименование риска
+			td(colspan=2)
+				| {{RiskCard.model.Name}}
+		tr(ng-show="RiskCard.model.WorkspaceUrl")
+			td(colspan="2")
+				a(ng-href="{{RiskCard.model.WorkspaceUrl}}", target="_blank", title="Рабочая область")
+					img(src="../img/folder.gif?rev=23") 
+					| Вложение
+		tr
+			td
+				strong Угроза/возможность
+			td(colspan=2)
+				| {{ (RiskCard.lists.ThreatOpportunities | filter : { Id: RiskCard.model.ThreatOpportunityId } : true)[0].Title }}
+		tr
+			td
+				strong Стратегия реагирования на риск
+			td(colspan=2)
+				| {{ (RiskCard.lists.RiskResponseStrategies | filter : { Id: RiskCard.model.RiskResponseStrategyId } : true)[0].Title }}
+		tr
+			td
+				strong Отчётный год
+			td(colspan=2)
+				| {{RiskCard.model.ReportYear}}
+		tr
+			td
+				strong Администратор риска
+			td(colspan=2)
+				| {{ (RiskCard.lists.Users | filter : { Id: RiskCard.model.AdministratorUserInfoId } : true)[0].Title }}
+		tr
+			td
+				strong Вероятность наступления риска
+			td(colspan=2)
+				img(ng-src="../img/{{RiskCard.model.Probability}}.png", style="height:40px", ng-show="RiskCard.model.Probability")
+		// tr
+			td
+				strong Отклонение от плана-графика мероприятий*
+			td(colspan=2)
+				| {{RiskCard.model.Divergence}}

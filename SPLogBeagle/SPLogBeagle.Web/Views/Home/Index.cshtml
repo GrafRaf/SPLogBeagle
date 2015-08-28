@@ -15,11 +15,18 @@
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <h3>Parameters</h3>
             <hr />
-            <label class="control-label"><input type="radio" ng-model="LogView.searchType" value="folders"> Search acros predefined location</label><br />
+            <md-radio-group ng-model="LogView.searchType">
+                <md-radio-button value="folders" class="md-primary">Search acros predefined location</md-radio-button>
+                <md-radio-button value="files">Search acros uploaded files </md-radio-button>
+            </md-radio-group>
+            <md-checkbox ng-model="LogView.isRemoteLogProcessing" aria-label="IsRemoteLogProcessing" ng-show="LogView.searchType == 'folders'">
+                IsRemoteLogProcessing
+            </md-checkbox>
+            @*<label class="control-label"><input type="radio" ng-model="LogView.searchType" value="folders"> Search acros predefined location</label><br />
             <label class="control-label"><input type="radio" ng-model="LogView.searchType" value="files"> Search acros uploaded files</label><br />
-            <label class="control-label" ng-show="searchType == 'folders'"><input type="checkbox" ng-model="LogView.isRemoteLogProcessing"> IsRemoteLogProcessing</label><br />
+            <label class="control-label" ng-show="searchType == 'folders'"><input type="checkbox" ng-model="LogView.isRemoteLogProcessing"> IsRemoteLogProcessing</label><br />*@
 
-            <div ng-show="searchType == 'folders'">
+            @*<div ng-show="searchType == 'folders'">
                 <div class="form-group col-md-6 col-lg-6"> 
                     <label class="control-label" for="startDate">From</label>
                     <p class="input-group">
@@ -38,48 +45,62 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </div>*@
+
         </div>
 
         <div class="col-md-6 col-lg-6">
-            <h3>Locations</h3>
-            <hr />
-            <ul ng-show="LogView.searchType == 'folders'">
-                <li ng-repeat="lf in LogView.logFolders">
-                    <label><input type="checkbox" ng-model="lf.isChecked" />{{lf.title}}</label>
-                </li>
-            </ul>
-            <div ng-show="LogView.searchType == 'files'">
-                <input type="file" nv-file-select uploader="LogView.uploader" multiple /><br />
-                <ul>
-                    <li ng-repeat="item in LogView.uploader.queue">
-                        <span ng-bind="item.file.name"></span><br />
-                    </li>
-                </ul>
-            </div>
+            <md-list ng-show="LogView.searchType == 'folders'">
+                <md-subheader class="md-no-sticky">Locations</md-subheader>
+                <md-list-item ng-repeat="lf in LogView.logFolders">
+                    <md-checkbox ng-model="lf.isChecked" aria-label="{{lf.title}}"></md-checkbox>
+                    <p>{{lf.title}}</p>
+                </md-list-item>
+            </md-list>
+            <md-list ng-show="LogView.searchType == 'files'">
+                <md-subheader class="md-no-sticky">Файлы</md-subheader>
+                <md-list>
+                    <md-list-item class="md-3-line" ng-repeat="item in LogView.uploader.queue">
+                        <div class="md-list-item-text" ng-bind="item.file.name"></div>
+                    </md-list-item>
+                </md-list>
+                <md-list-item>
+                    <input type="file" nv-file-select uploader="LogView.uploader" multiple />
+                </md-list-item>
+            </md-list>
         </div>
 
     </div>
-    <div class="col-md-12 col-lg-12">
-        <div class="form-group">
+    <div layout="row">
+        @*<div class="form-group">
             <label class="control-label" for="pattern">Pattern or CorrelationUid</label>
             <div class="input-group col-md-12 col-lg-12">
                 <input type="text" required class="form-control" ng-model="LogView.pattern" id="pattern" placeholder="test-pattern">
                 <span class="btn btn-success input-group-addon" ng-click="LogView.search()">Search</span>
             </div>
+        </div>*@
+        <div  flex="90">
+            <md-input-container>
+                <label>Pattern or CorrelationUid</label>
+                <input ng-model="LogView.pattern" required>
+            </md-input-container>
         </div>
+        <div flex="10">
+            <md-button class="md-raised md-primary" ng-click="LogView.search()">Search</md-button>
+        </div>
+
     </div>
     <hr />
     <div class="col-md-12 col-lg-12">
-        <label><input type="checkbox" ng-model="LogView.vTimestamp" />Timestamp</label>&nbsp;&nbsp;
-        <label><input type="checkbox" ng-model="LogView.vProcess" />Process</label>&nbsp;&nbsp;
-        <label><input type="checkbox" ng-model="LogView.vTID" />TID</label>&nbsp;&nbsp;
-        <label><input type="checkbox" ng-model="LogView.vArea" />Area</label>&nbsp;&nbsp;
-        <label><input type="checkbox" ng-model="LogView.vCategory" />Category</label>&nbsp;&nbsp;
-        <label><input type="checkbox" ng-model="LogView.vEventID" />EventID</label>&nbsp;&nbsp;
-        <label><input type="checkbox" ng-model="LogView.vLevel" />Level</label>&nbsp;&nbsp;
-        <label><input type="checkbox" ng-model="LogView.vMessage" />Message</label>&nbsp;&nbsp;
-        <label><input type="checkbox" ng-model="LogView.vCorrelationUid" />CorrelationUid</label>
+        <md-checkbox ng-model="LogView.vTimestamp" aria-label="vTimestamp">vTimestamp</md-checkbox>
+        <md-checkbox ng-model="LogView.vProcess" aria-label="vTimestamp">Process</md-checkbox>
+        <md-checkbox ng-model="LogView.vTID" aria-label="vTimestamp">TID</md-checkbox>
+        <md-checkbox ng-model="LogView.vArea" aria-label="vTimestamp">Area</md-checkbox>
+        <md-checkbox ng-model="LogView.vCategory" aria-label="vTimestamp">Category</md-checkbox>
+        <md-checkbox ng-model="LogView.vEventID" aria-label="vTimestamp">EventID</md-checkbox>
+        <md-checkbox ng-model="LogView.vLevel" aria-label="vTimestamp">Level</md-checkbox>
+        <md-checkbox ng-model="LogView.vMessage" aria-label="vTimestamp">Message</md-checkbox>
+        <md-checkbox ng-model="LogView.vCorrelationUid" aria-label="vTimestamp">CorrelationUid</md-checkbox>
     </div>
     <hr />
     <div class="col-md-12 col-lg-12" ng-init="LogView.isParametersOpen='true'">
@@ -87,23 +108,23 @@
         <accordion>
             <accordion-group ng-repeat="log in LogView.model.LogFiles" heading="{{log.Name}} - {{log.Count}}">
                 <h3>{{log.Name}} - {{log.Count}}</h3>
-                <table ng-if="log.Count>0" class="table table-condensed">
+                <table  class="table table-condensed" ng-if="log.Count>0" >
                     <thead>
                         <tr>
-                            <th ng-repeat="th in log.Data.Value.Header" ng-show="v{{th}}">{{th}}</th>
+                            <th ng-repeat="th in log.Data.Value.Header" ng-show="LogView.v{{th}}" >{{th}}</th> <!-- ng-show="v{th}" -->
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="row in log.Data.Value.Body">
-                            <td ng-show="vTimestamp">{{row[0]}}</td>
-                            <td ng-show="vProcess">{{row[1]}}</td>
-                            <td ng-show="vTID">{{row[2]}}</td>
-                            <td ng-show="vArea">{{row[3]}}</td>
-                            <td ng-show="vCategory">{{row[4]}}</td>
-                            <td ng-show="vEventID">{{row[5]}}</td>
-                            <td ng-show="vLevel">{{row[6]}}</td>
-                            <td ng-show="vMessage">{{row[7]}}</td>
-                            <td ng-show="vCorrelationUid">{{row[8]}}</td>
+                            <td ng-show="LogView.vTimestamp">{{row[0]}}</td>
+                            <td ng-show="LogView.vProcess">{{row[1]}}</td>
+                            <td ng-show="LogView.vTID">{{row[2]}}</td>
+                            <td ng-show="LogView.vArea">{{row[3]}}</td>
+                            <td ng-show="LogView.vCategory">{{row[4]}}</td>
+                            <td ng-show="LogView.vEventID">{{row[5]}}</td>
+                            <td ng-show="LogView.vLevel">{{row[6]}}</td>
+                            <td ng-show="LogView.vMessage">{{row[7]}}</td>
+                            <td ng-show="LogView.vCorrelationUid">{{row[8]}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -117,7 +138,11 @@
     <a href="javascript:window.external.addService('/content/SPLogBeagleAccelerator.xml')">Install accelerator</a>
 </div>
 @section Scripts{
-    <script type="text/javascript" src="~/scripts/angular.min.js"></script>
-    <script type="text/javascript" src="~/scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
+    <script type="text/javascript" src="~/scripts/angular-file-upload.min.js"></script>
+    @*<script type="text/javascript" src="~/scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>*@
     <script type="text/javascript" src="~/app/scripts/init.js"></script>
 }
